@@ -1,9 +1,7 @@
 package src.Bicicleta;
 
-import src.Bicicleta.Bicicleta;
-
 public class BicicletaMontana extends Bicicleta {
-    public BicicletaMontana(int idBicicleta) {
-        super();
+    public BicicletaMontana(int id_bicicleta) {
+        super(id_bicicleta);
     }
 }
