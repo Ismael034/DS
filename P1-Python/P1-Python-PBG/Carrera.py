@@ -1,6 +1,9 @@
 from abc import ABC, abstractmethod
 
-class ClaseAbstracta(ABC):
+class Carrera(ABC):
+    def __init__(self):
+        self.bicicletas = []
+
     @abstractmethod
-    def metodo_abstracto(self):
+    def iniciar(self):
         pass

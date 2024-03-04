@@ -1,16 +1,26 @@
-# This is a sample Python script.
 
-# Press Mayús+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+import threading
+from FactoriaCarretera import FactoriaCarretera
+from FactoriaMontana import FactoriaMontana
 
+def main():
+    factoria = FactoriaCarretera()
+    carreraCarretera = factoria.crearCarrera(5)
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+    factoria = FactoriaMontana()
+    carreraMontana = factoria.crearCarrera(5)
 
+    # Crear dos hebras
+    hebra1 = threading.Thread(target=carreraCarretera.iniciar)
+    hebra2 = threading.Thread(target=carreraMontana.iniciar)
 
-# Press the green button in the gutter to run the script.
+    # Iniciar las hebras
+    hebra1.start()
+    hebra2.start()
+
+    # Esperar a que ambas hebras terminen
+    hebra1.join()
+    hebra2.join()
+
 if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    main()
