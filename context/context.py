@@ -9,5 +9,4 @@ class Context:
         pass
 
     def scrape(self, url):
-        self._strategy.scrape(url)
-        pass
+        return self._strategy.scrape(url)
