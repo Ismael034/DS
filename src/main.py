@@ -1,7 +1,8 @@
 
 import threading
-from FactoriaCarretera import FactoriaCarretera
-from FactoriaMontana import FactoriaMontana
+import random
+from Factoria.FactoriaCarretera import FactoriaCarretera
+from Factoria.FactoriaMontana import FactoriaMontana
 
 def main():
     factoria = FactoriaCarretera()

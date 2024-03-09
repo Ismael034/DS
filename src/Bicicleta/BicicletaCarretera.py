@@ -1,6 +1,6 @@
 import copy
 
-from Bicicleta import Bicicleta
+from Bicicleta.Bicicleta import Bicicleta
 
 
 class BicicletaCarretera(Bicicleta):

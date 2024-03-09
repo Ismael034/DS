@@ -1,7 +1,7 @@
-from FactoriaCarreraYBicicleta import FactoriaCarreraYBicicleta
 import random
-from BicicletaCarretera import BicicletaCarretera
-from CarreraCarretera import CarreraCarretera
+from Factoria.FactoriaCarreraYBicicleta import FactoriaCarreraYBicicleta
+from Bicicleta.BicicletaCarretera import BicicletaCarretera
+from Carrera.CarreraCarretera import CarreraCarretera
 
 
 class FactoriaCarretera(FactoriaCarreraYBicicleta):
