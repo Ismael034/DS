@@ -37,6 +37,11 @@ def main():
         )
         console = Console()
         console.print(table)
+
+        # Save the data into results.json in a pretty format
+        with open('results.json', 'w') as file:
+            file.write(str(scrape_data))
+            print("Data saved to results.json")
     except TypeError:
         print("Failed to retrieve the webpage.")
 
