@@ -12,4 +12,4 @@ en teoría](https://github.com/Ismael034/DS/tree/p1-libre)
 - [Ejercicio 4: El patrón (estilo) arquitectónico filtros de intercepción en java. Simulación del movimiento de un vehículo con
 cambio automático](https://github.com/Ismael034/DS/tree/p1-simulacion)
 
-- [Ejercicio 5: Patrón Factoría Abstracta en Java](https://github.com/Ismael034/DS/tree/p1-opcional)
+- [Ejercicio 5: Ejercicio 5 (opt) +1 punto](https://github.com/Ismael034/DS/tree/p1-opcional)
