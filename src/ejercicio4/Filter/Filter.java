@@ -11,8 +11,5 @@ import ejercicio4.MotorState.MotorState;
  * @author augus
  */
 public interface Filter {
-    int INCREASEVELOCITY = 100;
-    int MAXVELOCITY = 5000;
-    
     public double ejecutar(double revoluciones, MotorState estadoMotor);
 }
