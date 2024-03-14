@@ -14,22 +14,23 @@ public class FilterCalculateVelocity implements Filter {
     int INCREASEVELOCITY = 100;
     int MAXVELOCITY = 5000;
     @Override
-    public double ejecutar(double revoluciones, MotorState estadoMotor) {
-        switch(estadoMotor) {
+    public double execute(double rpm, MotorState state) {
+        switch(state) {
             case MotorState.ACELERANDO -> {
-                revoluciones += INCREASEVELOCITY;
-                if (revoluciones > MAXVELOCITY) {
-                    revoluciones = MAXVELOCITY;
+                rpm += INCREASEVELOCITY;
+                if (rpm > MAXVELOCITY) {
+                    rpm = MAXVELOCITY;
                 }
             }
             case MotorState.FRENANDO -> {
-                revoluciones -= INCREASEVELOCITY;
-                if (revoluciones < 0) {
-                    revoluciones = 0;
+                rpm -= INCREASEVELOCITY;
+                if (rpm < 0) {
+                    rpm = 0;
                 }
             }
+
         }
         
-        return revoluciones;
+        return rpm;
     }
 }

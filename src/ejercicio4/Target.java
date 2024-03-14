@@ -10,7 +10,7 @@ import ejercicio4.MotorState.MotorState;
  *
  * @author augus
  */
-public class Objetivo {
+public class Target {
     double velocity;
     double RADIO = 0.14;
 

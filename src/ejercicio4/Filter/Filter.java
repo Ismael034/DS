@@ -11,5 +11,5 @@ import ejercicio4.MotorState.MotorState;
  * @author augus
  */
 public interface Filter {
-    public double ejecutar(double revoluciones, MotorState estadoMotor);
+    public double execute(double rpm, MotorState state);
 }

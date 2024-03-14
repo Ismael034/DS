@@ -30,9 +30,9 @@ public class Speedometer extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         state = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        motorKey = new javax.swing.JButton();
+        speedUp = new javax.swing.JButton();
+        stop = new javax.swing.JButton();
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -70,15 +70,15 @@ public class Speedometer extends javax.swing.JFrame {
         jPanel1.getAccessibleContext().setAccessibleName("");
         jPanel1.getAccessibleContext().setAccessibleDescription("");
 
-        jButton1.setText("jButton1");
-        jButton1.setMargin(new java.awt.Insets(2, 20, 3, 20));
-        jPanel2.add(jButton1);
+        motorKey.setText("ENCENDER");
+        motorKey.setMargin(new java.awt.Insets(2, 20, 3, 20));
+        jPanel2.add(motorKey);
 
-        jButton2.setText("jButton2");
-        jPanel2.add(jButton2);
+        speedUp.setText("ACELERAR");
+        jPanel2.add(speedUp);
 
-        jButton3.setText("jButton3");
-        jPanel2.add(jButton3);
+        stop.setText("FRENAR");
+        jPanel2.add(stop);
 
         getContentPane().add(jPanel2, java.awt.BorderLayout.CENTER);
 
@@ -121,12 +121,12 @@ public class Speedometer extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JButton motorKey;
+    private javax.swing.JButton speedUp;
     private javax.swing.JLabel state;
+    private javax.swing.JButton stop;
     // End of variables declaration//GEN-END:variables
 }

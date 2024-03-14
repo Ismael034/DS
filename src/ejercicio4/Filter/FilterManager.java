@@ -4,17 +4,10 @@
  */
 package ejercicio4.Filter;
 
-import ejercicio4.MotorState.MotorState;
-
 /**
  *
  * @author augus
  */
-public class FilterImpactFriction implements Filter {
-    int FRICTION = 30;
-
-    @Override
-    public double execute(double rpm, MotorState state) {
-        return rpm - FRICTION;
-    }
+public class FilterManager {
+    
 }
