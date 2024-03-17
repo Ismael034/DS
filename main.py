@@ -1,4 +1,4 @@
-from context.strategy_ctx import StrategyContext
+from context.scraper_ctx import ScraperContext
 from strategy.beautiful_strategy import BeautifulSoupStrategy
 from strategy.selenium_strategy import SeleniumStrategy
 from rich.table import Table
@@ -17,10 +17,10 @@ def main():
         if choice.isdigit():
             choice = int(choice)
             if choice == 1:
-                context = StrategyContext(BeautifulSoupStrategy(get_json_config()))
+                context = ScraperContext(BeautifulSoupStrategy(get_json_config()))
                 break
             elif choice == 2:
-                context = StrategyContext(SeleniumStrategy(get_json_config()))
+                context = ScraperContext(SeleniumStrategy(get_json_config()))
                 break
             else:
                 print("Invalid choice. Please try again.")

@@ -1,4 +1,4 @@
-class StrategyContext:
+class ScraperContext:
     def __init__(self, strategy):
         self._strategy = strategy
         pass
