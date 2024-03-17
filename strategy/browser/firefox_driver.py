@@ -2,7 +2,7 @@ from selenium import webdriver
 from selenium.webdriver import FirefoxOptions
 from selenium.webdriver.firefox.service import Service
 from webdriver_manager.firefox import GeckoDriverManager
-from strategy.browser.browser_driver import BrowserStrategy
+from strategy.browser.browser_strategy import BrowserStrategy
 from selenium.webdriver.support.wait import WebDriverWait
 
 class FirefoxDriver(BrowserStrategy):

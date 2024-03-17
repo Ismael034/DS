@@ -48,7 +48,11 @@ class SeleniumStrategy(ScrapingStrategy):
         WebDriverWait(self.driver, self.wait).until(EC.element_to_be_clickable((By.XPATH,self.cookies)))
         cookie_element = self.driver.find_element(By.XPATH, self.cookies)
         self.driver.execute_script("arguments[0].click();", cookie_element)
-        WebDriverWait(self.driver, self.wait).until(EC.presence_of_element_located((By.CSS_SELECTOR, self.config['Selenium']['previous_close'])))
+
+        try:
+            WebDriverWait(self.driver, self.wait).until(EC.presence_of_element_located((By.CSS_SELECTOR, self.config['Selenium']['previous_close'])))
+        except:
+            return 'Failed to retrieve the webpage.'
 
         for key, value in self.config['Selenium'].items():
             self.result[key] = self.find_element(self.driver, value)
