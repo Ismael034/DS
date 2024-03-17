@@ -3,25 +3,27 @@ from bs4 import BeautifulSoup
 from strategy.scraping_strategy import ScrapingStrategy 
 
 class BeautifulSoupStrategy(ScrapingStrategy):
+    def __init__(self, config):
+        self.result = {}
+        self.config = config
+        self.url = f"{config['config']['base_url']}"
+
+    def find_element(self, soup, element):
+        try:
+            return soup.find('td', element).text.strip()
+        except AttributeError:
+            return None
+        
     def scrape(self, symbol):
-        url = f"https://finance.yahoo.com/quote/{symbol}"
-        response = requests.get(url)
+        self.url = f"{self.url}/{symbol}"
+        response = requests.get(self.url)
+
         if response.status_code == 200:
             soup = BeautifulSoup(response.content, 'html.parser')
             
-            try:
-                previous_close = soup.find('td', {'data-test': 'PREV_CLOSE-value'}).text.strip()
-                open_price = soup.find('td', {'data-test': 'OPEN-value'}).text.strip()
-                volume = soup.find('td', {'data-test': 'TD_VOLUME-value'}).text.strip()
-                market_cap = soup.find('td', {'data-test': 'MARKET_CAP-value'}).text.strip()
-            except AttributeError:
-                return None
-
-            return {
-                'previous_close': previous_close,
-                'open_price': open_price,
-                'volume': volume,
-                'market_cap': market_cap
-            }
+            for key, value in self.config['BeautifulSoup'].items():
+                self.result[key] = self.find_element(soup, value)
+            return self.result
+        
         else:
             return 'Failed to retrieve the webpage.'

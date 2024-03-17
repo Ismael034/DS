@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-class ScrapingStrategy(ABC):
+class BrowserDriver(ABC):
     @abstractmethod
-    def scrape(self, symbol, config):
+    def get_driver(self, driver):
         pass

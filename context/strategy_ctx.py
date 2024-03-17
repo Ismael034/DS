@@ -1,5 +1,4 @@
-
-class Context:
+class StrategyContext:
     def __init__(self, strategy):
         self._strategy = strategy
         pass

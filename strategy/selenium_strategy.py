@@ -1,38 +1,57 @@
-from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.chrome.options import Options
-from webdriver_manager.chrome import ChromeDriverManager
 from strategy.scraping_strategy import ScrapingStrategy
+from context.browser_ctx import BrowserContext
+from strategy.browser.chrome_driver import ChromeDriver
+from strategy.browser.firefox_driver import FirefoxDriver
 
 class SeleniumStrategy(ScrapingStrategy):
-    def scrape(self, symbol):
-        chrome_options = Options()
-        chrome_options.add_argument("--headless")
-        chrome_options.add_argument("--start-maximized")
+    def __init__(self, config):
+        self.url = f"{config['config']['base_url']}"
+        self.cookies = config['config']['cookie_xpath']
+        self.wait = config['config']['wait']
+        self.config = config
 
-        driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
-        url = f"https://finance.yahoo.com/quote/{symbol}"
-        driver.get(url)
+        self.result = {}
+        self.driver = BrowserContext(self.get_driver()).get_driver()
         
-        WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH,'//*[@id="consent-page"]/div/div/div/form/div[2]/div[2]/button[1]'))).click()
+    def get_driver(self):
+        print("Select a browser: ")
+        print(" 1. Chrome")
+        print(" 2. Firefox\n")
+        
+        while True:
+            choice = input("Enter choice: ")
+            if choice.isdigit():
+                choice = int(choice)
+                if choice == 1:
+                    return ChromeDriver(self.config).get_driver()
+                elif choice == 2:
+                    return FirefoxDriver(self.config).get_driver()
+                else:
+                    print("Invalid choice. Please try again.")
+            else:
+                print("Invalid choice. Please try again.")
+        
 
+    def find_element(self, driver, element):
         try:
-            previous_close = driver.find_element(By.CSS_SELECTOR, '[data-test="PREV_CLOSE-value"]').text
-            open_price = driver.find_element(By.CSS_SELECTOR, '[data-test="OPEN-value"]').text
-            volume = driver.find_element(By.CSS_SELECTOR, '[data-test="TD_VOLUME-value"]').text
-            market_cap = driver.find_element(By.CSS_SELECTOR, '[data-test="MARKET_CAP-value"]').text
-
-            driver.quit()
-        
-            return {
-                'previous_close': previous_close,
-                'open_price': open_price,
-                'volume': volume,
-                'market_cap': market_cap
-            }
-        except Exception as e:
-            driver.quit()
+            return driver.find_element(By.CSS_SELECTOR, element).text
+        except AttributeError:
             return None
+        
+    def scrape(self, symbol):
+        self.url = f"{self.url}/{symbol}"
+        self.driver.get(self.url)
+
+        WebDriverWait(self.driver, self.wait).until(EC.element_to_be_clickable((By.XPATH,self.cookies)))
+        cookie_element = self.driver.find_element(By.XPATH, self.cookies)
+        self.driver.execute_script("arguments[0].click();", cookie_element)
+        WebDriverWait(self.driver, self.wait).until(EC.presence_of_element_located((By.CSS_SELECTOR, self.config['Selenium']['previous_close'])))
+
+        for key, value in self.config['Selenium'].items():
+            self.result[key] = self.find_element(self.driver, value)
+        
+        self.driver.quit()
+        return self.result
