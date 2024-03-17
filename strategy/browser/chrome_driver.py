@@ -3,9 +3,9 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
-from strategy.browser.browser_driver import BrowserDriver
+from strategy.browser.browser_driver import BrowserStrategy
 
-class ChromeDriver(BrowserDriver):
+class ChromeDriver(BrowserStrategy):
     def __init__(self, config):
         self.config = config
         self.service = Service(ChromeDriverManager().install())
