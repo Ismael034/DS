@@ -26,9 +26,9 @@ class SeleniumStrategy(ScrapingStrategy):
             if choice.isdigit():
                 choice = int(choice)
                 if choice == 1:
-                    return ChromeDriver(self.config).get_driver()
+                    return ChromeDriver().get_driver()
                 elif choice == 2:
-                    return FirefoxDriver(self.config).get_driver()
+                    return FirefoxDriver().get_driver()
                 else:
                     print("Invalid choice. Please try again.")
             else:
