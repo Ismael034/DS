@@ -3,9 +3,5 @@ class BrowserContext:
         self._driver = driver
         pass
 
-    def set_driver(self, driver):
-        self._driver = driver
-        pass
-
     def get_driver(self):
         return self._driver
