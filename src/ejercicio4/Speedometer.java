@@ -4,17 +4,45 @@
  */
 package ejercicio4;
 
+import ejercicio4.Filter.FilterCalculateVelocity;
+import ejercicio4.Filter.FilterImpactFriction;
+import ejercicio4.Filter.FilterManager;
+import ejercicio4.MotorState.MotorState;
+import java.awt.Color;
+
 /**
  *
  * @author augus
  */
 public class Speedometer extends javax.swing.JFrame {
-
+    boolean engineOn = false;
+    Target target = new Target();
+    int increaseRPM = 0;
+    double velocity;
+    double RADIO = 0.14;
+    private FilterManager filterManager = new FilterManager(this);
+    FilterCalculateVelocity filter1 = new FilterCalculateVelocity();
+    FilterImpactFriction filter2 = new FilterImpactFriction();
+   
+    
+    public void getSpeed() {
+        
+    }
     /**
      * Creates new form Speedometer
      */
     public Speedometer() {
+        this.filterManager.addFilter(filter1);
+        this.filterManager.addFilter(filter2);
         initComponents();
+    }
+    
+    public void execute(double rpm, MotorState state) {
+        velocity = 2 * Math.PI * RADIO * rpm * (60/1000);
+        System.out.println("TARGET");
+        System.out.println(velocity);
+        this.speed.setText(String.valueOf(velocity));
+        this.rpm.setText(String.valueOf(rpm));
     }
 
     /**
@@ -27,12 +55,36 @@ public class Speedometer extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel3 = new javax.swing.JPanel();
+        buttonGroup1 = new javax.swing.ButtonGroup();
+        jPanel4 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         state = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
-        motorKey = new javax.swing.JButton();
-        speedUp = new javax.swing.JButton();
-        stop = new javax.swing.JButton();
+        motorState = new javax.swing.JToggleButton();
+        speedUp = new javax.swing.JToggleButton();
+        stop = new javax.swing.JToggleButton();
+        jPanel5 = new javax.swing.JPanel();
+        jPanel7 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jPanel9 = new javax.swing.JPanel();
+        jPanel8 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        jPanel12 = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        speed = new javax.swing.JTextField();
+        jPanel10 = new javax.swing.JPanel();
+        jLabel6 = new javax.swing.JLabel();
+        jPanel6 = new javax.swing.JPanel();
+        jLabel4 = new javax.swing.JLabel();
+        recentCounter = new javax.swing.JTextField();
+        jPanel11 = new javax.swing.JPanel();
+        jLabel5 = new javax.swing.JLabel();
+        totalCounter = new javax.swing.JTextField();
+        jPanel13 = new javax.swing.JPanel();
+        jLabel7 = new javax.swing.JLabel();
+        jPanel14 = new javax.swing.JPanel();
+        jLabel8 = new javax.swing.JLabel();
+        rpm = new javax.swing.JTextField();
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -48,42 +100,201 @@ public class Speedometer extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         state.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        state.setText("jLabel1");
+        state.setText("APAGADO");
+
+        motorState.setForeground(java.awt.Color.green);
+        motorState.setText("ENCENDER");
+        motorState.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                motorStateActionPerformed(evt);
+            }
+        });
+        jPanel2.add(motorState);
+
+        buttonGroup1.add(speedUp);
+        speedUp.setText("ACELERAR");
+        speedUp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                speedUpActionPerformed(evt);
+            }
+        });
+        jPanel2.add(speedUp);
+
+        buttonGroup1.add(stop);
+        stop.setText("FRENAR");
+        stop.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                stopActionPerformed(evt);
+            }
+        });
+        jPanel2.add(stop);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addComponent(state, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(state, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(24, 24, 24)
+                .addGap(21, 21, 21)
                 .addComponent(state)
-                .addContainerGap(29, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        getContentPane().add(jPanel1, java.awt.BorderLayout.NORTH);
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+
         jPanel1.getAccessibleContext().setAccessibleName("");
         jPanel1.getAccessibleContext().setAccessibleDescription("");
 
-        motorKey.setText("ENCENDER");
-        motorKey.setMargin(new java.awt.Insets(2, 20, 3, 20));
-        jPanel2.add(motorKey);
+        getContentPane().add(jPanel4, java.awt.BorderLayout.NORTH);
 
-        speedUp.setText("ACELERAR");
-        jPanel2.add(speedUp);
+        jPanel5.setLayout(new java.awt.BorderLayout());
 
-        stop.setText("FRENAR");
-        jPanel2.add(stop);
+        jPanel7.setLayout(new java.awt.BorderLayout());
 
-        getContentPane().add(jPanel2, java.awt.BorderLayout.CENTER);
+        jLabel1.setText("Salpicadero");
+        jPanel7.add(jLabel1, java.awt.BorderLayout.CENTER);
+
+        jPanel9.setLayout(new java.awt.BorderLayout());
+
+        jPanel8.setLayout(new java.awt.GridLayout(2, 0));
+
+        jLabel2.setText("Velocímetro");
+        jPanel8.add(jLabel2);
+
+        jLabel3.setText("Km/h:");
+        jPanel12.add(jLabel3);
+
+        speed.setText("jTextField1");
+        jPanel12.add(speed);
+
+        jPanel8.add(jPanel12);
+
+        jPanel9.add(jPanel8, java.awt.BorderLayout.PAGE_START);
+
+        jPanel10.setLayout(new java.awt.GridLayout(3, 0));
+
+        jLabel6.setText("Cuentakilómetros");
+        jPanel10.add(jLabel6);
+
+        jLabel4.setText("contador reciente:");
+        jPanel6.add(jLabel4);
+
+        recentCounter.setText("jTextField1");
+        jPanel6.add(recentCounter);
+
+        jPanel10.add(jPanel6);
+
+        jLabel5.setText("contador total:");
+        jPanel11.add(jLabel5);
+
+        totalCounter.setText("jTextField1");
+        totalCounter.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                totalCounterActionPerformed(evt);
+            }
+        });
+        jPanel11.add(totalCounter);
+
+        jPanel10.add(jPanel11);
+
+        jPanel9.add(jPanel10, java.awt.BorderLayout.CENTER);
+
+        jPanel13.setLayout(new java.awt.GridLayout(2, 0));
+
+        jLabel7.setText("Cuentarrevoluciones");
+        jPanel13.add(jLabel7);
+
+        jLabel8.setText("RPM:");
+        jPanel14.add(jLabel8);
+
+        rpm.setEditable(false);
+        rpm.setText("0");
+        rpm.setToolTipText("");
+        jPanel14.add(rpm);
+
+        jPanel13.add(jPanel14);
+
+        jPanel9.add(jPanel13, java.awt.BorderLayout.PAGE_END);
+
+        jPanel7.add(jPanel9, java.awt.BorderLayout.SOUTH);
+
+        jPanel5.add(jPanel7, java.awt.BorderLayout.PAGE_START);
+
+        getContentPane().add(jPanel5, java.awt.BorderLayout.SOUTH);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void totalCounterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_totalCounterActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_totalCounterActionPerformed
+
+    private void motorStateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_motorStateActionPerformed
+        this.engineOn = !this.engineOn;
+        if (this.engineOn) {
+            this.state.setText(MotorState.ENCENDIDO.toString());
+            this.motorState.setForeground(Color.red);
+            this.motorState.setText("APAGAR");
+        }
+        
+        if (!this.engineOn) {
+            this.state.setText(MotorState.APAGADO.toString());
+            this.motorState.setForeground(Color.green);
+            this.motorState.setText("ENCENDER");
+            this.stop.setText("FRENAR");
+            this.stop.setForeground(Color.black);
+            this.speedUp.setText("ACELERAR");
+            this.speedUp.setForeground(Color.black);
+        }
+        
+    }//GEN-LAST:event_motorStateActionPerformed
+
+    private void speedUpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_speedUpActionPerformed
+        if (this.state.getText() != MotorState.APAGADO.toString()) {
+            
+            this.speedUp.setText("Soltar acelerador");
+            this.speedUp.setForeground(Color.red);
+            this.stop.setText("FRENAR");
+            this.stop.setForeground(Color.black);
+            this.state.setText(MotorState.ACELERANDO.toString());
+            String pepe;
+            this.filterManager.execute(this.increaseRPM, MotorState.ACELERANDO);
+        }
+        
+    }//GEN-LAST:event_speedUpActionPerformed
+
+    private void stopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stopActionPerformed
+        if (this.state.getText() != MotorState.APAGADO.toString()) {
+            this.stop.setText("Soltar freno");
+            this.stop.setForeground(Color.red);
+            this.speedUp.setText("ACELERAR");
+            this.speedUp.setForeground(Color.black);
+            this.state.setText(MotorState.FRENANDO.toString());
+            this.filterManager.execute(this.increaseRPM, MotorState.FRENANDO);
+        }
+    }//GEN-LAST:event_stopActionPerformed
 
     /**
      * @param args the command line arguments
@@ -121,12 +332,36 @@ public class Speedometer extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel10;
+    private javax.swing.JPanel jPanel11;
+    private javax.swing.JPanel jPanel12;
+    private javax.swing.JPanel jPanel13;
+    private javax.swing.JPanel jPanel14;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JButton motorKey;
-    private javax.swing.JButton speedUp;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel9;
+    private javax.swing.JToggleButton motorState;
+    private javax.swing.JTextField recentCounter;
+    private javax.swing.JTextField rpm;
+    private javax.swing.JTextField speed;
+    private javax.swing.JToggleButton speedUp;
     private javax.swing.JLabel state;
-    private javax.swing.JButton stop;
+    private javax.swing.JToggleButton stop;
+    private javax.swing.JTextField totalCounter;
     // End of variables declaration//GEN-END:variables
 }

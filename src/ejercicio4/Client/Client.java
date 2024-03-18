@@ -19,5 +19,10 @@ public class Client {
         this.filterManager = fManager;
     }
     
+    public void getSpeed() {
+        
+    }
+   
+    
     
 }

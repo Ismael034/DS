@@ -15,6 +15,10 @@ public class FilterImpactFriction implements Filter {
 
     @Override
     public double execute(double rpm, MotorState state) {
+        if (rpm - FRICTION < 0) {
+            return 0;
+        }
         return rpm - FRICTION;
+        
     }
 }

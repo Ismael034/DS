@@ -14,9 +14,10 @@ public class Target {
     double velocity;
     double RADIO = 0.14;
 
-    public double ejecutar(double revoluciones, MotorState estadoMotor) {
-        velocity = 2 * Math.PI * RADIO * revoluciones * (60/1000);
-        
+    public double execute(double rpm, MotorState state) {
+        velocity = 2 * Math.PI * RADIO * rpm * (60/1000);
+        System.out.println("TARGET");
+        System.out.println(rpm);
         return velocity;
     }
 }

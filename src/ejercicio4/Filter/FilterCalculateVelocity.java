@@ -21,6 +21,8 @@ public class FilterCalculateVelocity implements Filter {
                 if (rpm > MAXVELOCITY) {
                     rpm = MAXVELOCITY;
                 }
+                System.out.println("FILTER CALCULATE_VELOCITY");
+                 System.out.println(rpm);
             }
             case MotorState.FRENANDO -> {
                 rpm -= INCREASEVELOCITY;

@@ -5,6 +5,7 @@
 package ejercicio4.Filter;
 
 import ejercicio4.MotorState.MotorState;
+import ejercicio4.Speedometer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,15 +15,25 @@ import java.util.List;
  */
 public class FilterChain {
     private List<Filter> filters = new ArrayList<>();
-    private 
+    private Speedometer target;
     
     public void addFilter( Filter filter) {
         this.filters.add(filter);
     }
     
+    public void setTarget(Speedometer target) {
+        this.target = target;
+    }
+    
     public void execute(double rpm, MotorState state) {
+        
         for (Filter filter : this.filters) {
-            filter.execute(rpm, state);
+            rpm = filter.execute(rpm, state);
+        }
+        System.out.println("FILTER_CHAIN");
+        System.out.println(rpm);
+        if (this.target != null) {
+            target.execute(rpm, state);
         }
     }
 }
