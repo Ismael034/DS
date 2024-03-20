@@ -16,21 +16,16 @@ import java.awt.Color;
  */
 public class Speedometer extends javax.swing.JFrame {
     boolean engineOn = false;
-    Target target = new Target();
-    int increaseRPM = 0;
-    double velocity;
-    double RADIO = 0.14;
+    double increaseRPM = 0;
+    float velocity = 0;
+    double RADIO = 0.15;
+    double KM =  0.067;
+    double increaseKm = 0;
+    double totalCounterNum = 0;
     private FilterManager filterManager = new FilterManager(this);
-    FilterCalculateVelocity filter1 = new FilterCalculateVelocity();
-    FilterImpactFriction filter2 = new FilterImpactFriction();
-   
-    
-    public void getSpeed() {
-        
-    }
-    /**
-     * Creates new form Speedometer
-     */
+    private FilterCalculateVelocity filter1 = new FilterCalculateVelocity();
+    private FilterImpactFriction filter2 = new FilterImpactFriction();
+
     public Speedometer() {
         this.filterManager.addFilter(filter1);
         this.filterManager.addFilter(filter2);
@@ -38,11 +33,53 @@ public class Speedometer extends javax.swing.JFrame {
     }
     
     public void execute(double rpm, MotorState state) {
-        velocity = 2 * Math.PI * RADIO * rpm * (60/1000);
-        System.out.println("TARGET");
-        System.out.println(velocity);
+        velocity = (float) (2 * Math.PI * RADIO * rpm * (60.0/1000.0));
         this.speed.setText(String.valueOf(velocity));
         this.rpm.setText(String.valueOf(rpm));
+    }
+    
+    public void setSpeedUp() {
+        this.speedUp.setText("Soltar acelerador");
+        this.speedUp.setForeground(Color.red);
+        this.stop.setText("FRENAR");
+        this.stop.setForeground(Color.black);
+        this.state.setText(MotorState.ACELERANDO.toString());
+    }
+    
+    public void setStop() {
+        this.stop.setText("Soltar freno");
+        this.stop.setForeground(Color.red);
+        this.speedUp.setText("ACELERAR");
+        this.speedUp.setForeground(Color.black);
+        this.state.setText(MotorState.FRENANDO.toString());
+    }
+    
+    public void setEngineOn() {
+        this.state.setText(MotorState.ENCENDIDO.toString());
+        this.motorState.setForeground(Color.red);
+        this.motorState.setText("APAGAR");
+        this.recentCounter.setText("0.0");
+        this.totalCounterNum = Double.parseDouble(this.totalCounter.getText().replace(',', '.'));
+        this.speed.setText("0.0");
+        this.rpm.setText("0.0");
+    }
+    
+    public void setEngineOff() {
+        this.state.setText(MotorState.APAGADO.toString());
+        this.motorState.setForeground(Color.green);
+        this.motorState.setText("ENCENDER");
+        this.stop.setText("FRENAR");
+        this.stop.setForeground(Color.black);
+        this.speedUp.setText("ACELERAR");
+        this.speedUp.setForeground(Color.black);
+        this.increaseKm = 0;
+    }
+    
+    public void setCounters() {
+        this.increaseKm += this.KM;
+        this.totalCounterNum += this.KM;
+        this.recentCounter.setText(String.format("%.2f", increaseKm));
+        this.totalCounter.setText(String.format("%.2f", totalCounterNum));
     }
 
     /**
@@ -186,7 +223,8 @@ public class Speedometer extends javax.swing.JFrame {
         jLabel3.setText("Km/h:");
         jPanel12.add(jLabel3);
 
-        speed.setText("jTextField1");
+        speed.setText("0");
+        speed.setPreferredSize(new java.awt.Dimension(120, 22));
         jPanel12.add(speed);
 
         jPanel8.add(jPanel12);
@@ -201,7 +239,8 @@ public class Speedometer extends javax.swing.JFrame {
         jLabel4.setText("contador reciente:");
         jPanel6.add(jLabel4);
 
-        recentCounter.setText("jTextField1");
+        recentCounter.setText("0");
+        recentCounter.setPreferredSize(new java.awt.Dimension(120, 22));
         jPanel6.add(recentCounter);
 
         jPanel10.add(jPanel6);
@@ -209,7 +248,8 @@ public class Speedometer extends javax.swing.JFrame {
         jLabel5.setText("contador total:");
         jPanel11.add(jLabel5);
 
-        totalCounter.setText("jTextField1");
+        totalCounter.setText("0");
+        totalCounter.setPreferredSize(new java.awt.Dimension(120, 22));
         totalCounter.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 totalCounterActionPerformed(evt);
@@ -229,9 +269,10 @@ public class Speedometer extends javax.swing.JFrame {
         jLabel8.setText("RPM:");
         jPanel14.add(jLabel8);
 
-        rpm.setEditable(false);
         rpm.setText("0");
         rpm.setToolTipText("");
+        rpm.setMinimumSize(new java.awt.Dimension(100, 22));
+        rpm.setPreferredSize(new java.awt.Dimension(120, 22));
         jPanel14.add(rpm);
 
         jPanel13.add(jPanel14);
@@ -254,45 +295,32 @@ public class Speedometer extends javax.swing.JFrame {
     private void motorStateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_motorStateActionPerformed
         this.engineOn = !this.engineOn;
         if (this.engineOn) {
-            this.state.setText(MotorState.ENCENDIDO.toString());
-            this.motorState.setForeground(Color.red);
-            this.motorState.setText("APAGAR");
+            this.setEngineOn();
         }
         
         if (!this.engineOn) {
-            this.state.setText(MotorState.APAGADO.toString());
-            this.motorState.setForeground(Color.green);
-            this.motorState.setText("ENCENDER");
-            this.stop.setText("FRENAR");
-            this.stop.setForeground(Color.black);
-            this.speedUp.setText("ACELERAR");
-            this.speedUp.setForeground(Color.black);
-        }
-        
+            this.setEngineOff();
+        } 
     }//GEN-LAST:event_motorStateActionPerformed
 
     private void speedUpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_speedUpActionPerformed
         if (this.state.getText() != MotorState.APAGADO.toString()) {
-            
-            this.speedUp.setText("Soltar acelerador");
-            this.speedUp.setForeground(Color.red);
-            this.stop.setText("FRENAR");
-            this.stop.setForeground(Color.black);
-            this.state.setText(MotorState.ACELERANDO.toString());
-            String pepe;
+            this.setSpeedUp();
+            this.increaseRPM = Double.parseDouble(this.rpm.getText());
             this.filterManager.execute(this.increaseRPM, MotorState.ACELERANDO);
+            this.setCounters();
+            
         }
-        
     }//GEN-LAST:event_speedUpActionPerformed
 
     private void stopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stopActionPerformed
         if (this.state.getText() != MotorState.APAGADO.toString()) {
-            this.stop.setText("Soltar freno");
-            this.stop.setForeground(Color.red);
-            this.speedUp.setText("ACELERAR");
-            this.speedUp.setForeground(Color.black);
-            this.state.setText(MotorState.FRENANDO.toString());
+            this.setStop();
+            this.increaseRPM = Double.parseDouble(this.rpm.getText());
             this.filterManager.execute(this.increaseRPM, MotorState.FRENANDO);
+            if (Double.parseDouble(speed.getText().replace(',', '.')) != 0.0) {
+                this.setCounters();
+            }
         }
     }//GEN-LAST:event_stopActionPerformed
 

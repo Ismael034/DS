@@ -6,7 +6,6 @@ package ejercicio4.Filter;
 
 import ejercicio4.MotorState.MotorState;
 import ejercicio4.Speedometer;
-import ejercicio4.Target;
 
 /**
  *
@@ -25,8 +24,6 @@ public class FilterManager {
     }
     
     public void execute(double rpm, MotorState state) {
-        System.out.println("FILTER_MANAGER");
-        System.out.println(rpm);
         filterChain.execute(rpm, state);
     }
 }

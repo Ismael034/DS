@@ -30,8 +30,6 @@ public class FilterChain {
         for (Filter filter : this.filters) {
             rpm = filter.execute(rpm, state);
         }
-        System.out.println("FILTER_CHAIN");
-        System.out.println(rpm);
         if (this.target != null) {
             target.execute(rpm, state);
         }
