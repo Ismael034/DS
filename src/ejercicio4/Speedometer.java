@@ -9,6 +9,9 @@ import ejercicio4.Filter.FilterImpactFriction;
 import ejercicio4.Filter.FilterManager;
 import ejercicio4.MotorState.MotorState;
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.Timer;
 
 /**
  *
@@ -16,12 +19,13 @@ import java.awt.Color;
  */
 public class Speedometer extends javax.swing.JFrame {
     boolean engineOn = false;
-    double increaseRPM = 0;
+    double currentRPM = 0;
     float velocity = 0;
     double RADIO = 0.15;
     double KM =  0.067;
     double increaseKm = 0;
     double totalCounterNum = 0;
+    private Timer timer;
     private FilterManager filterManager = new FilterManager(this);
     private FilterCalculateVelocity filter1 = new FilterCalculateVelocity();
     private FilterImpactFriction filter2 = new FilterImpactFriction();
@@ -30,46 +34,83 @@ public class Speedometer extends javax.swing.JFrame {
         this.filterManager.addFilter(filter1);
         this.filterManager.addFilter(filter2);
         initComponents();
+        
+        timer = new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                currentRPM = Double.parseDouble(rpm.getText());
+                if (state.getText() == MotorState.ACELERANDO.toString()) {
+                    filterManager.execute(currentRPM, MotorState.ACELERANDO);
+                } else if (state.getText() == MotorState.FRENANDO.toString()) {
+                    filterManager.execute(currentRPM, MotorState.FRENANDO);
+                } else {
+                    filterManager.execute(currentRPM, MotorState.ENCENDIDO);
+                }
+                setDashboard();
+            }
+        }); 
+        timer.start();
     }
     
     public void execute(double rpm, MotorState state) {
         velocity = (float) (2 * Math.PI * RADIO * rpm * (60.0/1000.0));
-        this.speed.setText(String.valueOf(velocity));
-        this.rpm.setText(String.valueOf(rpm));
+        currentRPM = rpm;
     }
-    
+    public void setDashboard(){
+        if (Double.parseDouble(speed.getText().replace(',', '.')) != 0.0) {
+            setCounters();
+        }
+        speed.setText(String.valueOf(velocity));
+        rpm.setText(String.valueOf(currentRPM));
+        recentCounter.setText(String.format("%.2f", increaseKm));
+        totalCounter.setText(String.format("%.2f", totalCounterNum));   
+    }
     public void setSpeedUp() {
         this.speedUp.setText("Soltar acelerador");
         this.speedUp.setForeground(Color.red);
+        this.stop.setSelected(false);
         this.stop.setText("FRENAR");
         this.stop.setForeground(Color.black);
         this.state.setText(MotorState.ACELERANDO.toString());
     }
     
-    public void setStop() {
+    public void setIdle() {
+        this.speedUp.setText("ACELERAR");
+        this.speedUp.setForeground(Color.black);
+        this.speedUp.setSelected(false);
+        this.stop.setText("FRENAR");
+        this.stop.setForeground(Color.black);
+        this.stop.setSelected(false);
+        this.state.setText(MotorState.ENCENDIDO.toString());
+    }
+    
+    public void setSpeedDown() {
         this.stop.setText("Soltar freno");
         this.stop.setForeground(Color.red);
+        this.speedUp.setSelected(false);
         this.speedUp.setText("ACELERAR");
         this.speedUp.setForeground(Color.black);
         this.state.setText(MotorState.FRENANDO.toString());
     }
     
     public void setEngineOn() {
+        this.speedUp.setSelected(false);
+        this.stop.setSelected(false);
         this.state.setText(MotorState.ENCENDIDO.toString());
         this.motorState.setForeground(Color.red);
         this.motorState.setText("APAGAR");
-        this.recentCounter.setText("0.0");
+        this.recentCounter.setText("0,00");
         this.totalCounterNum = Double.parseDouble(this.totalCounter.getText().replace(',', '.'));
-        this.speed.setText("0.0");
-        this.rpm.setText("0.0");
     }
     
     public void setEngineOff() {
         this.state.setText(MotorState.APAGADO.toString());
         this.motorState.setForeground(Color.green);
         this.motorState.setText("ENCENDER");
+        this.stop.setSelected(false);
         this.stop.setText("FRENAR");
         this.stop.setForeground(Color.black);
+        this.speedUp.setSelected(false);
         this.speedUp.setText("ACELERAR");
         this.speedUp.setForeground(Color.black);
         this.increaseKm = 0;
@@ -78,8 +119,6 @@ public class Speedometer extends javax.swing.JFrame {
     public void setCounters() {
         this.increaseKm += this.KM;
         this.totalCounterNum += this.KM;
-        this.recentCounter.setText(String.format("%.2f", increaseKm));
-        this.totalCounter.setText(String.format("%.2f", totalCounterNum));
     }
 
     /**
@@ -102,15 +141,12 @@ public class Speedometer extends javax.swing.JFrame {
         stop = new javax.swing.JToggleButton();
         jPanel5 = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
         jPanel9 = new javax.swing.JPanel();
         jPanel8 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
         jPanel12 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         speed = new javax.swing.JTextField();
         jPanel10 = new javax.swing.JPanel();
-        jLabel6 = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         recentCounter = new javax.swing.JTextField();
@@ -118,7 +154,6 @@ public class Speedometer extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         totalCounter = new javax.swing.JTextField();
         jPanel13 = new javax.swing.JPanel();
-        jLabel7 = new javax.swing.JLabel();
         jPanel14 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
         rpm = new javax.swing.JTextField();
@@ -148,7 +183,6 @@ public class Speedometer extends javax.swing.JFrame {
         });
         jPanel2.add(motorState);
 
-        buttonGroup1.add(speedUp);
         speedUp.setText("ACELERAR");
         speedUp.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -157,7 +191,6 @@ public class Speedometer extends javax.swing.JFrame {
         });
         jPanel2.add(speedUp);
 
-        buttonGroup1.add(stop);
         stop.setText("FRENAR");
         stop.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -208,22 +241,19 @@ public class Speedometer extends javax.swing.JFrame {
 
         jPanel5.setLayout(new java.awt.BorderLayout());
 
+        jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder("Salpicadero"));
         jPanel7.setLayout(new java.awt.BorderLayout());
-
-        jLabel1.setText("Salpicadero");
-        jPanel7.add(jLabel1, java.awt.BorderLayout.CENTER);
 
         jPanel9.setLayout(new java.awt.BorderLayout());
 
+        jPanel8.setBorder(javax.swing.BorderFactory.createTitledBorder("Velocímetro"));
         jPanel8.setLayout(new java.awt.GridLayout(2, 0));
-
-        jLabel2.setText("Velocímetro");
-        jPanel8.add(jLabel2);
 
         jLabel3.setText("Km/h:");
         jPanel12.add(jLabel3);
 
-        speed.setText("0");
+        speed.setEditable(false);
+        speed.setText("0.0");
         speed.setPreferredSize(new java.awt.Dimension(120, 22));
         jPanel12.add(speed);
 
@@ -231,24 +261,29 @@ public class Speedometer extends javax.swing.JFrame {
 
         jPanel9.add(jPanel8, java.awt.BorderLayout.PAGE_START);
 
+        jPanel10.setBorder(javax.swing.BorderFactory.createTitledBorder("Cuentakilómetros"));
         jPanel10.setLayout(new java.awt.GridLayout(3, 0));
 
-        jLabel6.setText("Cuentakilómetros");
-        jPanel10.add(jLabel6);
-
-        jLabel4.setText("contador reciente:");
+        jLabel4.setText("Contador reciente:");
         jPanel6.add(jLabel4);
 
-        recentCounter.setText("0");
+        recentCounter.setEditable(false);
+        recentCounter.setText("0,00");
         recentCounter.setPreferredSize(new java.awt.Dimension(120, 22));
+        recentCounter.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                recentCounterActionPerformed(evt);
+            }
+        });
         jPanel6.add(recentCounter);
 
         jPanel10.add(jPanel6);
 
-        jLabel5.setText("contador total:");
+        jLabel5.setText("Contador total:      ");
         jPanel11.add(jLabel5);
 
-        totalCounter.setText("0");
+        totalCounter.setEditable(false);
+        totalCounter.setText("0,00");
         totalCounter.setPreferredSize(new java.awt.Dimension(120, 22));
         totalCounter.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -261,15 +296,14 @@ public class Speedometer extends javax.swing.JFrame {
 
         jPanel9.add(jPanel10, java.awt.BorderLayout.CENTER);
 
+        jPanel13.setBorder(javax.swing.BorderFactory.createTitledBorder("Cuentarecoluciones"));
         jPanel13.setLayout(new java.awt.GridLayout(2, 0));
-
-        jLabel7.setText("Cuentarrevoluciones");
-        jPanel13.add(jLabel7);
 
         jLabel8.setText("RPM:");
         jPanel14.add(jLabel8);
 
-        rpm.setText("0");
+        rpm.setEditable(false);
+        rpm.setText("0.0");
         rpm.setToolTipText("");
         rpm.setMinimumSize(new java.awt.Dimension(100, 22));
         rpm.setPreferredSize(new java.awt.Dimension(120, 22));
@@ -305,24 +339,28 @@ public class Speedometer extends javax.swing.JFrame {
 
     private void speedUpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_speedUpActionPerformed
         if (this.state.getText() != MotorState.APAGADO.toString()) {
-            this.setSpeedUp();
-            this.increaseRPM = Double.parseDouble(this.rpm.getText());
-            this.filterManager.execute(this.increaseRPM, MotorState.ACELERANDO);
-            this.setCounters();
-            
+            if(this.state.getText() != MotorState.ACELERANDO.toString()){
+                this.setSpeedUp();
+            } else if (this.state.getText() != MotorState.ENCENDIDO.toString()) {
+                this.setIdle();
+            }
         }
+
     }//GEN-LAST:event_speedUpActionPerformed
 
     private void stopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stopActionPerformed
         if (this.state.getText() != MotorState.APAGADO.toString()) {
-            this.setStop();
-            this.increaseRPM = Double.parseDouble(this.rpm.getText());
-            this.filterManager.execute(this.increaseRPM, MotorState.FRENANDO);
-            if (Double.parseDouble(speed.getText().replace(',', '.')) != 0.0) {
-                this.setCounters();
+            if (this.state.getText() != MotorState.FRENANDO.toString()) {
+                this.setSpeedDown();
+            } else if (this.state.getText() != MotorState.ENCENDIDO.toString()) {
+                this.setIdle();
             }
         }
     }//GEN-LAST:event_stopActionPerformed
+
+    private void recentCounterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_recentCounterActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_recentCounterActionPerformed
 
     /**
      * @param args the command line arguments
@@ -361,13 +399,9 @@ public class Speedometer extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
