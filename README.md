@@ -1,16 +1,8 @@
-# concesionario_tunning
+# Concesionario Tunning - Practica 2 de Desarrollo de Software
 
-A new Flutter project.
+Proyecto realizado en flutter para la realización de actividad de mantenimiento a un codigo previamente implementado.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Para poder ejecutar este proyecto, se debe de llevar a un nuevo proyecto de flutter con AndroidStudio o abrirlo con tu editor de preferencia.
+Una vez abierto, ejecuta lib/main.dart
