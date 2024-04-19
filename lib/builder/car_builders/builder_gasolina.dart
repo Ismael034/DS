@@ -27,8 +27,7 @@ class BuilderGasolina implements CarBuilder {
 
   @override
   void addCosteRecarga(capacidad) {
-    throw UnimplementedError(
-        "No se puede añadir coste de recarga a un coche de gasolina");
+    _coche.costeRecarga = capacidad * 1.2; // 1.2 euros por litro
   }
 
   @override
