@@ -47,7 +47,6 @@ class _MyHomePageState extends State<MyHomePage> {
   late Director _director;
   late Context _context;
   late Coche _coche;
-  bool _modificado = false;
   final List<ListItem> _cars = List<ListItem>.empty(growable: true);
 
 
@@ -78,7 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         Padding(
                           padding: const EdgeInsets.only(left: 10.0, top: 5.0, bottom: 10.0),
                           child: FilterChip(
-                            label: Text('Autonomía: ' + item.getCoche().autonomia.toStringAsFixed(2) + ' km'),
+                            label: Text('Autonomía: ${item.getCoche().autonomia.toStringAsFixed(2)} km'),
                             onSelected: (bool value) {},
                             selected: true,
                             showCheckmark: false,
@@ -87,7 +86,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         Padding(
                           padding: const EdgeInsets.only(left: 10.0, top: 5.0, bottom: 10.0),
                           child: FilterChip(
-                            label: Text('Tiempo de recarga: ' + item.getCoche().tiempoRecarga.toStringAsFixed(2) + ' horas'),
+                            label: Text('Tiempo de recarga: ${item.getCoche().tiempoRecarga.toStringAsFixed(2)} horas'),
                             onSelected: (bool value) {},
                             selected: true,
                             showCheckmark: false,
@@ -96,7 +95,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         Padding(
                           padding: const EdgeInsets.only(left: 10.0, top: 5.0, bottom: 10.0),
                           child: FilterChip(
-                            label: Text('Coste de recarga: ' + item.getCoche().costeRecarga.toStringAsFixed(2) + ' €'),
+                            label: Text('Coste de recarga: ${item.getCoche().costeRecarga.toStringAsFixed(2)} €'),
                             onSelected: (bool value) {},
                             selected: true,
                             showCheckmark: false,
@@ -105,7 +104,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         Padding(
                           padding: const EdgeInsets.only(left: 10.0, top: 5.0, bottom: 10.0),
                           child: FilterChip(
-                            label: Text('Modificado: ' + (item.getCoche().modificado ? 'Sí' : 'No')),
+                            label: Text('Modificado: ${item.getCoche().modificado ? 'Sí' : 'No'}'),
                             onSelected: (bool value) {},
                             selected: true,
                             showCheckmark: false,
@@ -123,7 +122,7 @@ class _MyHomePageState extends State<MyHomePage> {
               top: 10,
               right: 20,
               child: IconButton(
-                icon: Icon(Icons.mode_edit_outlined), // Replace with your desired icon
+                icon: const Icon(Icons.mode_edit_outlined), // Replace with your desired icon
                 onPressed: () async {
                   if (item.getCoche().modificado) {
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -134,7 +133,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   int result = await showDialog(
                     context: context,
                     builder: (BuildContext context) {
-                      return CarStrategy(); // Using the imported dialog widget
+                      return const CarStrategy(); // Using the imported dialog widget
                     },
                   );
                   setState(() {
@@ -215,7 +214,6 @@ class _MyHomePageState extends State<MyHomePage> {
             _director.construir(result['modelo'], result['capacidad'], result['gastoKm']);
             _coche = _builder.getResultado();
             _cars.add(CarItem(_coche));
-            _modificado = true;
           });
                 },
         child: const Icon(Icons.add),

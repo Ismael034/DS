@@ -11,7 +11,7 @@ class _CarDialog extends State<CarDialog> {
   Combustible selectedCar = Combustible.gas; // default selected fuel type
   String? selectedModel; // selected car model
   List<String> availableModels = []; // List to hold available car models
-  var _controller = TextEditingController();
+  final _controller = TextEditingController();
 
 
   @override
@@ -57,7 +57,7 @@ class _CarDialog extends State<CarDialog> {
               ),
             ],
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           _buildSelector(),
         ],
       ),
@@ -68,7 +68,7 @@ class _CarDialog extends State<CarDialog> {
               content: Text("Debes de seleccionar un modelo"),
             )) : Navigator.of(context).pop(CarDataService.getCarByModel(selectedModel!));
           },
-          child: Text('OK'),
+          child: const Text('OK'),
         ),
       ],
     );

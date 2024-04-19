@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class CarStrategy extends StatefulWidget {
+  const CarStrategy({super.key});
+
   @override
   _CarStrategy createState() => _CarStrategy();
 }
@@ -24,13 +26,13 @@ class _CarStrategy extends State<CarStrategy> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text('Selecciona un modelo'),
+      title: const Text('Selecciona un modelo'),
       content: SingleChildScrollView(
         child: ListBody(
           children: <Widget>[
             ListTile(
-              title: Text('Deportivo'),
-              leading: new Radio(
+              title: const Text('Deportivo'),
+              leading: Radio(
                 value: 0,
                 groupValue: selector.selectedItem,
                 onChanged: (value) {
@@ -39,8 +41,8 @@ class _CarStrategy extends State<CarStrategy> {
               ),
             ),
             ListTile(
-              title: Text('Familiar'),
-              leading: new Radio(
+              title: const Text('Familiar'),
+              leading: Radio(
                 value: 1,
                 groupValue: selector.selectedItem,
                 onChanged: (value) {
@@ -49,8 +51,8 @@ class _CarStrategy extends State<CarStrategy> {
               ),
             ),
             ListTile(
-              title: Text('Confort'),
-              leading: new Radio(
+              title: const Text('Confort'),
+              leading: Radio(
                 value: 2,
                 groupValue: selector.selectedItem,
                 onChanged: (value) {
@@ -64,23 +66,4 @@ class _CarStrategy extends State<CarStrategy> {
     );
   }
 
-  void _showSelectedItem(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Selected Item'),
-          content: Text(selector.selectedItem),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('OK'),
-            ),
-          ],
-        );
-      },
-    );
-  }
 }
