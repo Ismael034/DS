@@ -1,15 +1,8 @@
-# Prácticas DS
+# Concesionario Tunning - Practica 2 de Desarrollo de Software
 
-## Práctica 1
+Proyecto realizado en flutter para la realización de actividad de mantenimiento a un codigo previamente implementado.
 
-- [Ejercicio 1: Patrón Factoría Abstracta en Java](https://github.com/Ismael034/DS/tree/p1-ejercicio1-java)
+## Getting Started
 
-- [Ejercicio 2: Patrón Factoría Abstracta + Patrón Prototipo Python](https://github.com/Ismael034/DS/tree/p1-ejercicio2-python)
-
-- [Ejercicio 3: Patrón libre (NO usado anteriormente) estudiado
-en teoría](https://github.com/Ismael034/DS/tree/p1-ejercicio3-libre)
-
-- [Ejercicio 4: El patrón (estilo) arquitectónico filtros de intercepción en java. Simulación del movimiento de un vehículo con
-cambio automático](https://github.com/Ismael034/DS/tree/p1-ejercicio4-vehiculo)
-
-- [Ejercicio 5: Ejercicio 5 (opt) +1 punto](https://github.com/Ismael034/DS/tree/p1-ejercicio5-opcional)
+Para poder ejecutar este proyecto, se debe de llevar a un nuevo proyecto de flutter con AndroidStudio o abrirlo con tu editor de preferencia.
+Una vez abierto, ejecuta lib/main.dart
