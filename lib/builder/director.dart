@@ -11,10 +11,10 @@ class Director {
     _builder.addModelo(modelo);
     _builder.addTipoCombustible();
     _builder.addAutonomia(capacidad, gastoKm);
+    _builder.addCosteRecarga(capacidad);
 
     if (_builder is BuilderElectrico || _builder is BuilderHibrido) {
       _builder.addTiempoRecarga(capacidad);
-      _builder.addCosteRecarga(capacidad);
     }
   }
 }
