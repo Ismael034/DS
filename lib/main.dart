@@ -144,28 +144,30 @@ class _MyHomePageState extends State<MyHomePage> {
                     ));
                     return;
                   }
-                  int result = await showDialog(
+                  dynamic result = await showDialog(
                     context: context,
                     builder: (BuildContext context) {
                       return const CarStrategy(); // Using the imported dialog widget
                     },
                   );
-                  setState(() {
-                    switch (result) {
-                      case 0:
-                        _context = Context(EstrategiaDeportivo());
-                        _context.ejecutarEstrategia(item.getCoche());
-                        break;
-                      case 1:
-                        _context = Context(EstrategiaFamiliar());
-                        _context.ejecutarEstrategia(item.getCoche());
-                        break;
-                      case 2:
-                        _context = Context(EstrategiaConfort());
-                        _context.ejecutarEstrategia(item.getCoche());
-                        break;
-                    }
-                  });
+                  if (result != null && result is int) {
+                    setState(() {
+                      switch (result) {
+                        case 0:
+                          _context = Context(EstrategiaDeportivo());
+                          _context.ejecutarEstrategia(item.getCoche());
+                          break;
+                        case 1:
+                          _context = Context(EstrategiaFamiliar());
+                          _context.ejecutarEstrategia(item.getCoche());
+                          break;
+                        case 2:
+                          _context = Context(EstrategiaConfort());
+                          _context.ejecutarEstrategia(item.getCoche());
+                          break;
+                      }
+                    });
+                  }
                 },
               ),
             ),
@@ -203,30 +205,33 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          Map<String, dynamic> result = await showDialog(
+          dynamic result = await showDialog(
             context: context,
             builder: (BuildContext context) {
               return CarDialog(); // Using the imported dialog widget
             },
           );
-          setState(() {
-            switch (result['tipoCombustible']) {
-              case 'Gasolina':
-                _builder = BuilderGasolina();
-                break;
-              case 'Hibrido':
-                _builder = BuilderHibrido();
-                break;
-              case 'Electrico':
-                _builder = BuilderElectrico();
-                break;
-            }
-            _director = Director(_builder);
-            _director.construir(
-                result['modelo'], result['capacidad'], result['gastoKm']);
-            _coche = _builder.getResultado();
-            _cars.add(CarItem(_coche));
-          });
+          if (result != null && result is Map<String, dynamic>) {
+            Map<String, dynamic> carData = result;
+            setState(() {
+              switch (result['tipoCombustible']) {
+                case 'Gasolina':
+                  _builder = BuilderGasolina();
+                  break;
+                case 'Hibrido':
+                  _builder = BuilderHibrido();
+                  break;
+                case 'Electrico':
+                  _builder = BuilderElectrico();
+                  break;
+              }
+              _director = Director(_builder);
+              _director.construir(
+                  result['modelo'], result['capacidad'], result['gastoKm']);
+              _coche = _builder.getResultado();
+              _cars.add(CarItem(_coche));
+            });
+          }
         },
         child: const Icon(Icons.add),
       ),
