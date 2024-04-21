@@ -212,7 +212,6 @@ class _MyHomePageState extends State<MyHomePage> {
             },
           );
           if (result != null && result is Map<String, dynamic>) {
-            Map<String, dynamic> carData = result;
             setState(() {
               switch (result['tipoCombustible']) {
                 case 'Gasolina':
