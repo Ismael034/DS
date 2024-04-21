@@ -26,44 +26,40 @@ class _CarStrategy extends State<CarStrategy> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Selecciona un modelo'),
+      title: const Text('Selecciona una modificación'),
       content: SingleChildScrollView(
         child: ListBody(
           children: <Widget>[
             ListTile(
               title: const Text('Deportivo'),
               leading: Radio(
-                value: 0,
-                groupValue: selector.selectedItem,
-                onChanged: (value) {
-                  Navigator.pop(context, value);
-                }
-              ),
+                  value: 0,
+                  groupValue: selector.selectedItem,
+                  onChanged: (value) {
+                    Navigator.pop(context, value);
+                  }),
             ),
             ListTile(
               title: const Text('Familiar'),
               leading: Radio(
-                value: 1,
-                groupValue: selector.selectedItem,
-                onChanged: (value) {
-                  Navigator.pop(context, value);
-                }
-              ),
+                  value: 1,
+                  groupValue: selector.selectedItem,
+                  onChanged: (value) {
+                    Navigator.pop(context, value);
+                  }),
             ),
             ListTile(
               title: const Text('Confort'),
               leading: Radio(
-                value: 2,
-                groupValue: selector.selectedItem,
-                onChanged: (value) {
-                  Navigator.pop(context, value);
-                }
-              ),
+                  value: 2,
+                  groupValue: selector.selectedItem,
+                  onChanged: (value) {
+                    Navigator.pop(context, value);
+                  }),
             ),
           ],
         ),
       ),
     );
   }
-
 }

@@ -11,6 +11,8 @@ class Coche {
   bool modificado = false;
 
   String getDescripcion() {
-    return "Modelo: $modelo\nTipo de combustible: $tipoCombustible\nAutonomía: $autonomia km\nTiempo de recarga: $tiempoRecarga h\nCoste de recarga: $costeRecarga €\n";
+    return "Modelo: $modelo\nTipo de combustible: $tipoCombustible\n"
+        "Autonomía: $autonomia km\nTiempo de recarga: $tiempoRecarga h\n"
+        "Coste de recarga: $costeRecarga €\n";
   }
 }

@@ -16,7 +16,7 @@ class BuilderElectrico implements CarBuilder {
 
   @override
   void addAutonomia(capacidad, gastoKm) {
-    _coche.autonomia = (capacidad * gastoKm) + ((10*(capacidad * gastoKm))/100);
+    _coche.autonomia = capacidad * gastoKm;
   }
 
   @override

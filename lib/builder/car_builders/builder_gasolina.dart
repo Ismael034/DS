@@ -16,7 +16,8 @@ class BuilderGasolina implements CarBuilder {
 
   @override
   void addAutonomia(capacidad, gastoKm) {
-    _coche.autonomia = capacidad * gastoKm; // Capacidad en litros por el gasto en km del coche
+    _coche.autonomia =
+        capacidad * gastoKm; // Capacidad en litros por el gasto en km del coche
   }
 
   @override
@@ -31,7 +32,7 @@ class BuilderGasolina implements CarBuilder {
   }
 
   @override
-  void addModelo(String modelo){
+  void addModelo(String modelo) {
     _coche.modelo = modelo;
   }
 }

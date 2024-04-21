@@ -16,7 +16,9 @@ class BuilderHibrido implements CarBuilder {
 
   @override
   void addAutonomia(capacidad, gastoKm) {
-    _coche.autonomia = (capacidad * gastoKm) + ((10*(capacidad * gastoKm))/100); // Capacidad en litros por el gasto en km del coche + 10% de recarga a la bateria
+    // Capacidad en litros por gasto en km del coche + 10% de recarga bateria
+    _coche.autonomia =
+        (capacidad * gastoKm) + ((10 * (capacidad * gastoKm)) / 100);
   }
 
   @override
@@ -26,7 +28,7 @@ class BuilderHibrido implements CarBuilder {
 
   @override
   void addCosteRecarga(capacidad) {
-    _coche.costeRecarga = capacidad * 0.1; // 0.1€ por kWh
+    _coche.costeRecarga = capacidad * 1.2; // 1.2 euros por litro
   }
 
   @override

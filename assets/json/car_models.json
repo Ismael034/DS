@@ -2,61 +2,61 @@
   {
     "modelo": "Toyota Corolla",
     "tipoCombustible": "Gasolina",
-    "capacidad": 7.1,
+    "capacidad": 71.0,
     "gastoKm": 0.3
   },
   {
-    "modelo": "Tesla Model S",
+    "modelo": "Tesla Model Y",
     "tipoCombustible": "Electrico",
-    "capacidad": 4.6,
+    "capacidad": 46.0,
     "gastoKm": 1.5
   },
   {
     "modelo": "Volkswagen Golf",
     "tipoCombustible": "Hibrido",
-    "capacidad": 2.6,
+    "capacidad": 26.0,
     "gastoKm": 2.5
   },
   {
     "modelo": "Ford Mustang",
     "tipoCombustible": "Gasolina",
-    "capacidad": 5.6,
+    "capacidad": 56.0,
     "gastoKm": 2.5
   },
   {
     "modelo": "Nissan Leaf",
     "tipoCombustible": "Electrico",
-    "capacidad": 9.6,
+    "capacidad": 96.0,
     "gastoKm": 2.2
   },
   {
     "modelo": "Honda Civic",
     "tipoCombustible": "Gasolina",
-    "capacidad": 7.6,
+    "capacidad": 76.0,
     "gastoKm": 2.5
   },
   {
     "modelo": "Chevrolet Bolt",
     "tipoCombustible": "Electrico",
-    "capacidad": 7.1,
+    "capacidad": 71.0,
     "gastoKm": 2.5
   },
   {
     "modelo": "Toyota Prius",
     "tipoCombustible": "Hibrido",
-    "capacidad": 2.6,
+    "capacidad": 26.0,
     "gastoKm": 0.8
   },
   {
     "modelo": "BMW 3 Series",
     "tipoCombustible": "Gasolina",
-    "capacidad": 10.6,
+    "capacidad": 106.0,
     "gastoKm": 4.5
   },
   {
     "modelo": "Audi e-tron",
     "tipoCombustible": "Electrico",
-    "capacidad": 1.3,
+    "capacidad":43.0,
     "gastoKm": 3.5
   }
 ]
