@@ -35,6 +35,7 @@ class CarFacade {
   }
 
   void deleteCar(int index) {
+    if (index >= _cars.length) throw Exception('Car not found');
     _cars.removeAt(index);
   }
 
@@ -48,6 +49,7 @@ class CarFacade {
   }
 
   void modifyCar(int strategy, int index) {
+    if (_cars[index].modificado) throw Exception('Car already modified');
     Context context;
     switch (strategy) {
       case 0:
