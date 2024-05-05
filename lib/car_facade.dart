@@ -82,26 +82,4 @@ class CarFacade {
   List<Coche> getCars() {
     return _cars;
   }
-
-  void importCars(List<Coche> cars) {
-    if (cars.isEmpty) {
-      throwException('The list is empty');
-    } else {
-      for (var coche in cars) {
-        if (coche.modelo.isEmpty) {
-          throwException('The car model is empty');
-        }
-        if (coche.tipoCombustible != Combustible.gas &&
-            coche.tipoCombustible != Combustible.hib &&
-            coche.tipoCombustible != Combustible.elec) {
-          throwException("The car's fuel type is not defined");
-        }
-        if (coche.autonomia <= 0) {
-          throwException("The car's autonomy must be greater than zero");
-        }
-      }
-      _cars.clear();
-      _cars.addAll(cars);
-    }
-  }
 }
