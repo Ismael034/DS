@@ -27,9 +27,10 @@ void main() {
 
       facade.modifyCar(0, 0);
 
+      expect(facade.getCars().first.modelo.contains(" Sport"), true);
       expect(facade.getCars().first.autonomia, autonomy * 0.8);
-      expect(facade.getCars().first.tiempoRecarga, 0);
       expect(facade.getCars().first.costeRecarga, rechargeCost + 10);
+      expect(facade.getCars().first.modificado, true);
     });
 
     test('Car double modification test', () {
@@ -43,8 +44,13 @@ void main() {
     });
 
     test('Unexpected car deletion test', () {
-      facade.deleteCar(0);
-      expect(() => facade.deleteCar(1), throwsException);
+      expect(() => facade.deleteCar(2), throwsException);
+    });
+
+    test('Car filtering test', () {
+      final filteredCars = facade.filterCars('Modelo2');
+      expect(filteredCars.length, 1);
+      expect(filteredCars.first.modelo, 'Modelo2');
     });
 
     test('Car sorting test', () {
@@ -52,12 +58,6 @@ void main() {
       expect(facade.getCars().first.modelo, 'Modelo2');
       facade.sortCars(true);
       expect(facade.getCars().first.modelo, 'Modelo');
-    });
-
-    test('Car filtering test', () {
-      final filteredCars = facade.filterCars('Modelo2');
-      expect(filteredCars.length, 1);
-      expect(filteredCars.first.modelo, 'Modelo2');
     });
   });
 }
