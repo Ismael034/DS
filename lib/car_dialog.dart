@@ -13,7 +13,6 @@ class _CarDialog extends State<CarDialog> {
   List<String> availableModels = []; // List to hold available car models
   final _controller = TextEditingController();
 
-
   @override
   void initState() {
     super.initState();
@@ -64,16 +63,24 @@ class _CarDialog extends State<CarDialog> {
       actions: [
         ElevatedButton(
           onPressed: () {
-            selectedModel == null ? ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-              content: Text("Debes de seleccionar un modelo"),
-            )) : Navigator.of(context).pop(CarDataService.getCarByModel(selectedModel!));
+            Navigator.of(context).pop();
+          },
+          child: const Text('Cancelar'),
+        ),
+        ElevatedButton(
+          onPressed: () {
+            selectedModel == null
+                ? ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    content: Text("Debes de seleccionar un modelo"),
+                  ))
+                : Navigator.of(context)
+                    .pop(CarDataService.getCarByModel(selectedModel!));
           },
           child: const Text('OK'),
         ),
       ],
     );
   }
-
 
   Widget _buildSelector() {
     return Container(
@@ -87,18 +94,19 @@ class _CarDialog extends State<CarDialog> {
               selectedModel = newValue;
             });
           },
-          dropdownMenuEntries: availableModels.map<DropdownMenuEntry<String>>((String value) {
+          dropdownMenuEntries:
+              availableModels.map<DropdownMenuEntry<String>>((String value) {
             return DropdownMenuEntry<String>(
               label: value,
               value: value,
             );
           }).toList(),
-        )
-    );
+        ));
   }
+
   Future<void> _loadModels(Combustible selectedType) async {
-    List<String> models = await CarDataService.getAvailableModelsByCombustible(
-        selectedType);
+    List<String> models =
+        await CarDataService.getAvailableModelsByCombustible(selectedType);
     setState(() {
       availableModels = models;
       selectedModel = null; // Reset selected model
