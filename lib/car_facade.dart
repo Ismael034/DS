@@ -27,11 +27,24 @@ class CarFacade {
       case 'Electrico':
         builder = BuilderElectrico();
         break;
+      default:
+        String message =
+            'Tipo de combustible incorrecto: ${carData['tipoCombustible']}';
+        throwException(message);
     }
+
+    if (carData['capacidad'] < 0 || carData['gastoKm'] < 0) {
+      throw Exception('Valores del modelo incorrectos');
+    }
+
     director = Director(builder);
     director.construir(
         carData['modelo'], carData['capacidad'], carData['gastoKm']);
     _cars.add(builder.getResultado());
+  }
+
+  void throwException(String message) {
+    throw Exception(message);
   }
 
   void deleteCar(int index) {
@@ -70,7 +83,24 @@ class CarFacade {
   }
 
   void importCars(List<Coche> cars) {
-    _cars.clear();
-    _cars.addAll(cars);
+    if (cars.isEmpty) {
+      throwException('La lista está vacía');
+    } else {
+      for (var coche in cars) {
+        if (coche.modelo.isEmpty) {
+          throwException('El modelo del coche está vacío');
+        }
+        if (coche.tipoCombustible != Combustible.gas &&
+            coche.tipoCombustible != Combustible.hib &&
+            coche.tipoCombustible != Combustible.elec) {
+          throwException('El tipo de combustible del coche no está definido');
+        }
+        if (coche.autonomia <= 0) {
+          throwException('La autonomía del coche debe ser mayor que cero');
+        }
+      }
+      _cars.clear();
+      _cars.addAll(cars);
+    }
   }
 }
