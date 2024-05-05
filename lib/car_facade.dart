@@ -13,11 +13,11 @@ import 'package:concesionario_tunning/builder/car_builders/builder_hibrido.dart'
 class CarFacade {
   final List<Coche> _cars = [];
 
-  void addCar(Map<String, dynamic> result) {
+  void buildCar(Map<String, dynamic> carData) {
     late CarBuilder builder;
     late Director director;
 
-    switch (result['tipoCombustible']) {
+    switch (carData['tipoCombustible']) {
       case 'Gasolina':
         builder = BuilderGasolina();
         break;
@@ -30,7 +30,7 @@ class CarFacade {
     }
     director = Director(builder);
     director.construir(
-        result['modelo'], result['capacidad'], result['gastoKm']);
+        carData['modelo'], carData['capacidad'], carData['gastoKm']);
     _cars.add(builder.getResultado());
   }
 

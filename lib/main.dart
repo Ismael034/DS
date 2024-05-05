@@ -243,7 +243,7 @@ class _MyHomePageState extends State<MyHomePage> {
           );
           if (result != null && result is Map<String, dynamic>) {
             setState(() {
-              _carFacade.addCar(result);
+              _carFacade.buildCar(result);
             });
           }
         },
