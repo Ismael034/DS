@@ -8,5 +8,5 @@ abstract class ListItem {
   /// The subtitle line, if any, to show in a list item.
   Widget buildType(BuildContext context);
 
-  Coche getCoche();
+  Coche getCar();
 }

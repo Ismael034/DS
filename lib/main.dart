@@ -1,18 +1,8 @@
 import 'package:concesionario_tunning/builder/coche.dart';
-import 'package:concesionario_tunning/builder/car_builders/builder_electrico.dart';
-import 'package:concesionario_tunning/builder/car_builders/builder_gasolina.dart';
-import 'package:concesionario_tunning/builder/car_builders/builder_hibrido.dart';
 import 'package:concesionario_tunning/car_dialog.dart';
 import 'package:concesionario_tunning/item/car_item.dart';
-import 'package:concesionario_tunning/strategy/context.dart';
-import 'package:concesionario_tunning/builder/director.dart';
-import 'package:concesionario_tunning/strategy/strategies/estrategia_confort.dart';
-import 'package:concesionario_tunning/strategy/strategies/estrategia_deportivo.dart';
-import 'package:concesionario_tunning/strategy/strategies/estrategia_familiar.dart';
-import 'package:concesionario_tunning/item/item_list.dart';
 import 'package:flutter/material.dart';
-
-import 'builder/builder.dart';
+import 'package:concesionario_tunning/car_facade.dart';
 import 'car_strategy.dart';
 
 void main() {
@@ -30,7 +20,8 @@ class Concesionario extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightGreenAccent),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: '¡Bienvenido al Concesionario Tunning!'),
+      home: const MyHomePage(title: 'Concesionario Tunning'),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
@@ -45,13 +36,10 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  late CarBuilder _builder;
-  late Director _director;
-  late Context _context;
-  late Coche _coche;
-  final List<ListItem> _cars = List<ListItem>.empty(growable: true);
+  final CarFacade _carFacade = CarFacade();
+  bool sortAsc = true;
 
-  Widget _buildCars(List<ListItem> items) {
+  Widget _buildCars(List<Coche> items) {
     return ListView.builder(
       itemCount: items.length,
       itemBuilder: (context, index) {
@@ -68,8 +56,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 children: [
                   Flexible(
                     child: ListTile(
-                      title: item.buildCar(context), // First part
-                      subtitle: item.buildType(context), // Second part
+                      title: CarItem(item).buildCar(context),
+                      subtitle: CarItem(item).buildType(context),
+                      leading: const Icon(Icons.car_rental),
                     ),
                   ),
                   Flexible(
@@ -80,7 +69,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               left: 10.0, top: 5.0, bottom: 10.0),
                           child: FilterChip(
                             label: Text(
-                                'Autonomía: ${item.getCoche().autonomia.toStringAsFixed(2)} km'),
+                                'Autonomía: ${item.autonomia.toStringAsFixed(2)} km'),
                             onSelected: (bool value) {},
                             selected: true,
                             showCheckmark: false,
@@ -91,7 +80,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               left: 10.0, top: 5.0, bottom: 10.0),
                           child: FilterChip(
                             label: Text(
-                                'Tiempo de recarga: ${item.getCoche().tiempoRecarga.toStringAsFixed(2)} horas'),
+                                'Tiempo de recarga: ${item.tiempoRecarga.toStringAsFixed(2)} horas'),
                             onSelected: (bool value) {},
                             selected: true,
                             showCheckmark: false,
@@ -102,7 +91,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               left: 10.0, top: 5.0, bottom: 10.0),
                           child: FilterChip(
                             label: Text(
-                                'Coste de recarga: ${item.getCoche().costeRecarga.toStringAsFixed(2)} €'),
+                                'Coste de recarga: ${item.costeRecarga.toStringAsFixed(2)} €'),
                             onSelected: (bool value) {},
                             selected: true,
                             showCheckmark: false,
@@ -113,11 +102,11 @@ class _MyHomePageState extends State<MyHomePage> {
                               left: 10.0, top: 5.0, bottom: 10.0),
                           child: FilterChip(
                             label: Text(
-                                'Modificado: ${item.getCoche().modificado ? 'Sí' : 'No'}'),
+                                'Modificado: ${item.modificado ? 'Sí' : 'No'}'),
                             onSelected: (bool value) {},
                             selected: true,
                             showCheckmark: false,
-                            color: item.getCoche().modificado
+                            color: item.modificado
                                 ? MaterialStateProperty.all<Color>(
                                     Colors.redAccent)
                                 : MaterialStateProperty.all<Color>(
@@ -138,7 +127,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 icon: const Icon(
                     Icons.mode_edit_outlined), // Replace with your desired icon
                 onPressed: () async {
-                  if (item.getCoche().modificado) {
+                  if (item.modificado) {
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                       content: Text("Error: El coche ya ha sido modificado"),
                     ));
@@ -152,22 +141,21 @@ class _MyHomePageState extends State<MyHomePage> {
                   );
                   if (result != null && result is int) {
                     setState(() {
-                      switch (result) {
-                        case 0:
-                          _context = Context(EstrategiaDeportivo());
-                          _context.ejecutarEstrategia(item.getCoche());
-                          break;
-                        case 1:
-                          _context = Context(EstrategiaFamiliar());
-                          _context.ejecutarEstrategia(item.getCoche());
-                          break;
-                        case 2:
-                          _context = Context(EstrategiaConfort());
-                          _context.ejecutarEstrategia(item.getCoche());
-                          break;
-                      }
+                      _carFacade.modifyCar(result, index);
                     });
                   }
+                },
+              ),
+            ),
+            Positioned(
+              bottom: 10,
+              right: 20,
+              child: IconButton(
+                icon: const Icon(Icons.delete),
+                onPressed: () {
+                  setState(() {
+                    _carFacade.deleteCar(index);
+                  });
                 },
               ),
             ),
@@ -192,12 +180,54 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.title),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.sort),
+            onPressed: () {
+              setState(() {
+                _carFacade.sortCars(sortAsc);
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text(sortAsc
+                      ? 'Orden ascendente alfabéticamente'
+                      : 'Orden descendente alfabéticamente'), // Show the sorting order
+                ));
+                sortAsc = !sortAsc;
+              });
+            },
+          ),
+          SearchAnchor(
+            searchController: SearchController(),
+            builder: (BuildContext context, SearchController controller) {
+              return IconButton(
+                icon: const Icon(Icons.search),
+                onPressed: () {
+                  controller.openView();
+                },
+              );
+            },
+            suggestionsBuilder:
+                (BuildContext context, SearchController controller) {
+              List<Coche> filteredCars = _carFacade.filterCars(controller.text);
+              return List<Widget>.generate(
+                filteredCars.length,
+                (index) {
+                  return ListTile(
+                    title: Text(filteredCars[index].modelo),
+                  );
+                },
+              );
+            },
+          ),
+        ],
+      ),
       body: Container(
-        child: _cars.isNotEmpty
+        child: _carFacade.getCars().isNotEmpty
             ? Row(
                 children: [
                   Expanded(
-                    child: _buildCars(_cars),
+                    child: _buildCars(_carFacade.getCars()),
                   ),
                 ],
               )
@@ -213,22 +243,7 @@ class _MyHomePageState extends State<MyHomePage> {
           );
           if (result != null && result is Map<String, dynamic>) {
             setState(() {
-              switch (result['tipoCombustible']) {
-                case 'Gasolina':
-                  _builder = BuilderGasolina();
-                  break;
-                case 'Hibrido':
-                  _builder = BuilderHibrido();
-                  break;
-                case 'Electrico':
-                  _builder = BuilderElectrico();
-                  break;
-              }
-              _director = Director(_builder);
-              _director.construir(
-                  result['modelo'], result['capacidad'], result['gastoKm']);
-              _coche = _builder.getResultado();
-              _cars.add(CarItem(_coche));
+              _carFacade.addCar(result);
             });
           }
         },

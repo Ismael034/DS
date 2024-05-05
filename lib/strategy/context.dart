@@ -6,7 +6,7 @@ class Context {
 
   Context(this._estrategia);
 
-  void ejecutarEstrategia(Coche coche) {
+  void modifyCar(Coche coche) {
     _estrategia.modificar(coche);
   }
 }

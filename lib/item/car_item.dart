@@ -41,7 +41,7 @@ class CarItem implements ListItem {
   }
 
   @override
-  Coche getCoche() {
+  Coche getCar() {
     return car;
   }
 }
