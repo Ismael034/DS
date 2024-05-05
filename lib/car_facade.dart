@@ -28,13 +28,12 @@ class CarFacade {
         builder = BuilderElectrico();
         break;
       default:
-        String message =
-            'Tipo de combustible incorrecto: ${carData['tipoCombustible']}';
+        String message = 'Wrong fuel type: ${carData['tipoCombustible']}';
         throwException(message);
     }
 
     if (carData['capacidad'] < 0 || carData['gastoKm'] < 0) {
-      throw Exception('Valores del modelo incorrectos');
+      throw Exception('Incorrect model values');
     }
 
     director = Director(builder);
@@ -48,7 +47,7 @@ class CarFacade {
   }
 
   void deleteCar(int index) {
-    if (index >= _cars.length) throw Exception('Car not found');
+    if (index >= _cars.length) throwException('Car not found');
     _cars.removeAt(index);
   }
 
@@ -62,7 +61,7 @@ class CarFacade {
   }
 
   void modifyCar(int strategy, int index) {
-    if (_cars[index].modificado) throw Exception('Car already modified');
+    if (_cars[index].modificado) throwException('Car already modified');
     Context context;
     switch (strategy) {
       case 0:
@@ -86,19 +85,19 @@ class CarFacade {
 
   void importCars(List<Coche> cars) {
     if (cars.isEmpty) {
-      throwException('La lista está vacía');
+      throwException('The list is empty');
     } else {
       for (var coche in cars) {
         if (coche.modelo.isEmpty) {
-          throwException('El modelo del coche está vacío');
+          throwException('The car model is empty');
         }
         if (coche.tipoCombustible != Combustible.gas &&
             coche.tipoCombustible != Combustible.hib &&
             coche.tipoCombustible != Combustible.elec) {
-          throwException('El tipo de combustible del coche no está definido');
+          throwException("The car's fuel type is not defined");
         }
         if (coche.autonomia <= 0) {
-          throwException('La autonomía del coche debe ser mayor que cero');
+          throwException("The car's autonomy must be greater than zero");
         }
       }
       _cars.clear();
