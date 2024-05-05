@@ -1,20 +1,25 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:concesionario_tunning/car_facade.dart';
 import 'package:concesionario_tunning/builder/coche.dart';
-import 'package:concesionario_tunning/tools/car_data_service.dart';
 
 void main() {
   group('CarFacade', () {
-    final facade = CarFacade();
-    const capacidad = 100.0;
-    const gastoKm = 10.0;
+    late CarFacade facade;
+    late dynamic carData;
+    late double capacidad;
+    late double gastoKm;
 
-    final carData = {
-      'modelo': 'Modelo',
-      'tipoCombustible': '',
-      'capacidad': 100.0,
-      'gastoKm': 10.0,
-    };
+    setUp(() {
+      facade = CarFacade();
+      capacidad = 100.0;
+      gastoKm = 10.0;
+      carData = {
+        'modelo': 'Modelo',
+        'tipoCombustible': '',
+        'capacidad': capacidad,
+        'gastoKm': gastoKm,
+      };
+    });
     test('Gasoline vehicle creation test', () {
       carData['tipoCombustible'] = 'Gasolina';
       facade.buildCar(carData);
@@ -39,7 +44,7 @@ void main() {
       expect(facade.getCars().last.tipoCombustible, Combustible.elec);
       expect(facade.getCars().last.autonomia, capacidad * gastoKm);
       expect(facade.getCars().last.tiempoRecarga, capacidad / 3);
-      expect(facade.getCars().last.costeRecarga, gastoKm);
+      expect(facade.getCars().last.costeRecarga, capacidad * 0.1);
     });
 
     test('Wrong fuel type test', () {
