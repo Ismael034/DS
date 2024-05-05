@@ -1,6 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:concesionario_tunning/car_facade.dart';
-import 'package:concesionario_tunning/builder/coche.dart';
 
 void main() {
   group('CarManager', () {
@@ -24,7 +23,6 @@ void main() {
     test('Car modification test', () {
       final car = facade.getCars().first;
       final autonomy = car.autonomia;
-      final rechargeTime = car.tiempoRecarga;
       final rechargeCost = car.costeRecarga;
 
       facade.modifyCar(0, 0);
