@@ -68,4 +68,9 @@ class CarFacade {
   List<Coche> getCars() {
     return _cars;
   }
+
+  void importCars(List<Coche> cars) {
+    _cars.clear();
+    _cars.addAll(cars);
+  }
 }
