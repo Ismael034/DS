@@ -3,7 +3,7 @@ class CarController < ApplicationController
     @car = Car.new(car_params)
     if @car.save
       logger.info "Car with id #{@car.id} created"
-      render json: @car.id
+      render json: @car
     else
       render json: @car.errors, status: :unprocessable_entity
     end
@@ -17,8 +17,10 @@ class CarController < ApplicationController
     @car = Car.find(params[:id])
   end
 
-  def new
-    @car = Car.new
+  def update
+    @car = Car.find(params[:id])
+    @car.update(car_params)
+    render json: @car
   end
 
   private
