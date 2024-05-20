@@ -17,5 +17,5 @@ class GasCarBuilder < CarBuilder
     
     def set_model(model)
         @car.model = model
-    endW
+    end
 end
