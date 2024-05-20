@@ -1,12 +1,24 @@
 class CarController < ApplicationController
   def create
-    @car = Car.new(car_params)
-    if @car.save
-      logger.info "Car with id #{@car.id} created"
-      render json: @car.id
-    else
-      render json: @car.errors, status: :unprocessable_entity
+    builder = case car_data['tipoCombustible']
+              when 'Gasolina'
+                BuilderGasolina.new
+              when 'Hibrido'
+                BuilderHibrido.new
+              when 'Electrico'
+                BuilderElectrico.new
+              else
+                message = "Wrong fuel type: #{car_data['tipoCombustible']}"
+                raise Exception.new(message)
+              end
+
+    if car_data['capacidad'] < 0 || car_data['gastoKm'] < 0
+      raise Exception.new('Incorrect model values')
     end
+
+    director = Director.new(builder)
+    director.construir(car_data['modelo'], car_data['capacidad'], car_data['gastoKm'])
+    @cars << builder.get_resultado
   end
 
   def index
@@ -21,18 +33,9 @@ class CarController < ApplicationController
     @car = Car.new
   end
 
-  def create
-    @car = Car.new(car_params)
-    if @car.save
-      redirect_to car_path(@car)
-    else
-      render :new
-    end
-  end
-
   private
 
   def car_params
-    params.require(:car).permit(:make, :model, :year, :price)
+    params.require(:car).permit(:model, :gas_type, :capacity, :autonomy)
   end
 end
