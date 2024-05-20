@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   # User routes
   resources :user
 
-  resources :users do
+  resources :user do
     get 'cars', on: :member
   end
 
