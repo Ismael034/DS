@@ -8,11 +8,12 @@ Rails.application.routes.draw do
   # User routes
   resources :user
 
+  resources :users do
+    get 'cars', on: :member
+  end
+
   # Car routes
   resources :car
-
-  # Model routes
-  resources :model
 
   # Defines the root path route ("/")
   # root "posts#index"
