@@ -1,4 +1,14 @@
 class CarController < ApplicationController
+  def create
+    @car = Car.new(car_params)
+    if @car.save
+      logger.info "Car with id #{@car.id} created"
+      render json: @car.id
+    else
+      render json: @car.errors, status: :unprocessable_entity
+    end
+  end
+
   def index
     @cars = Car.all
   end

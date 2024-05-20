@@ -11,6 +11,9 @@ Rails.application.routes.draw do
   # Car routes
   resources :car
 
+  # Model routes
+  resources :model
+
   # Defines the root path route ("/")
   # root "posts#index"
 end
