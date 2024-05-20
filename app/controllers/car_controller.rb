@@ -1,29 +1,12 @@
-require_relative '../builder/car_builder/gas_car_builder'
-require_relative '../builder/car_builder/hybrid_car_builder'
-require_relative '../builder/car_builder/electric_car_builder'
-
 class CarController < ApplicationController
   def create
-    builder = case car_params['gas_type']
-              when 'Gas'
-                GasCarBuilder.new
-              when 'Hybrid'
-                HybridCarBuilder.new
-              when 'Electric'
-                ElectricCarBuilder.new
-              else
-                message = "Wrong fuel type: #{car_params['gas_type']}"
-                render json: { error: message }, status: :unprocessable_entity
-                return
-              end
-
-    if car_params['capacity'] < 0 || car_params['autonomy'] < 0
-      raise Exception.new('Incorrect model values')
+    @car = Car.new(car_params)
+    if @car.save
+      logger.info "Car with id #{@car.id} created"
+      render json: @car.id
+    else
+      render json: @car.errors, status: :unprocessable_entity
     end
-
-    director = Director.new(builder)
-    director.construir(car_data['model'], car_data['capacity'], car_data['autonomy'])
-    @cars << builder.get_resultado
   end
 
   def index
@@ -41,6 +24,6 @@ class CarController < ApplicationController
   private
 
   def car_params
-    params.require(:car).permit(:model, :gas_type, :capacity, :autonomy)
+    params.require(:car).permit(:model, :gas_type, :autonomy, :refuel_time, :refuel_cost, :is_modified)
   end
 end
