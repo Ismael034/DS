@@ -9,9 +9,11 @@ import 'package:concesionario_tunning/strategy/strategies/estrategia_familiar.da
 import 'package:concesionario_tunning/builder/car_builders/builder_electrico.dart';
 import 'package:concesionario_tunning/builder/car_builders/builder_gasolina.dart';
 import 'package:concesionario_tunning/builder/car_builders/builder_hibrido.dart';
+import 'package:concesionario_tunning/user/user.dart';
 
 class CarFacade {
-  final List<Coche> _cars = [];
+  List<Coche> _cars = [];
+  User _user = User(id: -1, name: 'nulo');
 
   void buildCar(Map<String, dynamic> carData) {
     late CarBuilder builder;
@@ -49,6 +51,7 @@ class CarFacade {
   void deleteCar(int index) {
     if (index >= _cars.length) throwException('Car not found');
     _cars.removeAt(index);
+    //Método para eleminar el coche en el back
   }
 
   void sortCars(bool upward) {
@@ -77,9 +80,25 @@ class CarFacade {
         context.modifyCar(_cars[index]);
         break;
     }
+
+    //método para actualizar coche en el back
+  }
+
+  User getUser() {
+    return _user;
+  }
+
+  void setUser(User? user) {
+    if (user != null) {
+      _user = user;
+    }
   }
 
   List<Coche> getCars() {
     return _cars;
+  }
+
+  void setCars(List<Coche> list) {
+    _cars = list;
   }
 }

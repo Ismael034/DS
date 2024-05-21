@@ -1,9 +1,12 @@
+import 'dart:html';
+
 import 'package:concesionario_tunning/builder/coche.dart';
 import 'package:concesionario_tunning/car_dialog.dart';
 import 'package:concesionario_tunning/item/car_item.dart';
 import 'package:flutter/material.dart';
 import 'package:concesionario_tunning/car_facade.dart';
 import 'car_strategy.dart';
+import 'user/user.dart';
 
 void main() {
   runApp(const Concesionario());
@@ -38,6 +41,74 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final CarFacade _carFacade = CarFacade();
   bool sortAsc = true;
+  List<User> users = [];
+  List<Coche> allCoches = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchUsers().then((fetchedUsers) {
+      setState(() {
+        users = fetchedUsers;
+        _carFacade.setUser(users[0]);
+      });
+    });
+    fetchCoches().then((fetchedCoches) {
+      setState(() {
+        allCoches = fetchedCoches;
+      });
+    });
+  }
+
+  Future<List<User>> fetchUsers() async {
+    /*final response = await http.get(Uri.parse('http://localhost:3000/users'));
+
+  if (response.statusCode == 200) {
+    List<dynamic> data = jsonDecode(response.body);
+    return data.map((user) => User.fromJson(user)).toList();
+  } else {
+    throw Exception('Failed to load users');
+  }*/
+
+    List<User> users = [
+      User(id: 1, name: 'Alice'),
+      User(id: 2, name: 'Bob'),
+      User(id: 3, name: 'Charlie'),
+      User(id: 4, name: 'Diana'),
+    ];
+
+    return users;
+  }
+
+  Future<List<Coche>> fetchCoches() async {
+    await Future.delayed(Duration(seconds: 1));
+
+    List<Coche> coches = [
+      Coche(),
+      Coche(),
+    ];
+
+    coches[0].userId = 2;
+    coches[0].modelo = 'Cupra';
+    coches[0].autonomia = 120;
+    coches[0].tipoCombustible = Combustible.gas;
+    coches[0].costeRecarga = 20;
+
+    coches[1].userId = 1;
+    coches[1].modelo = 'Toyota';
+    coches[1].autonomia = 100;
+    coches[1].tipoCombustible = Combustible.gas;
+    coches[1].costeRecarga = 30;
+
+    return coches;
+  }
+
+  void filterCochesByUser(User user) {
+    setState(() {
+      _carFacade.setCars(
+          allCoches.where((coche) => coche.userId == user.id).toList());
+    });
+  }
 
   Widget _buildCars(List<Coche> items) {
     return ListView.builder(
@@ -113,7 +184,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                     Colors.lightGreen),
                           ),
                         ),
-                        // Add more chips as needed
                       ],
                     ),
                   ),
@@ -124,8 +194,7 @@ class _MyHomePageState extends State<MyHomePage> {
               top: 10,
               right: 20,
               child: IconButton(
-                icon: const Icon(
-                    Icons.mode_edit_outlined), // Replace with your desired icon
+                icon: const Icon(Icons.mode_edit_outlined),
                 onPressed: () async {
                   if (item.modificado) {
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -136,7 +205,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   dynamic result = await showDialog(
                     context: context,
                     builder: (BuildContext context) {
-                      return const CarStrategy(); // Using the imported dialog widget
+                      return const CarStrategy();
                     },
                   );
                   if (result != null && result is int) {
@@ -197,6 +266,26 @@ class _MyHomePageState extends State<MyHomePage> {
               });
             },
           ),
+          DropdownButton<User>(
+            value: _carFacade.getUser(),
+            hint: Text("Seleccionar usuario"),
+            onChanged: (User? newValue) {
+              setState(() {
+                _carFacade.setUser(newValue);
+                if (_carFacade.getUser().id != -1) {
+                  filterCochesByUser(_carFacade.getUser());
+                } else {
+                  _carFacade.setCars([]);
+                }
+              });
+            },
+            items: users.map<DropdownMenuItem<User>>((User user) {
+              return DropdownMenuItem<User>(
+                value: user,
+                child: Text(user.name),
+              );
+            }).toList(),
+          ),
           SearchAnchor(
             searchController: SearchController(),
             builder: (BuildContext context, SearchController controller) {
@@ -231,7 +320,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ],
               )
-            : emptyList(), // Showing empty list if no cars
+            : emptyList(),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {

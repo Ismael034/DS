@@ -9,6 +9,7 @@ class Coche {
   double tiempoRecarga = 0;
   double costeRecarga = 0;
   bool modificado = false;
+  late double userId = 0;
 
   String getDescripcion() {
     return "Modelo: $modelo\nTipo de combustible: $tipoCombustible\n"
