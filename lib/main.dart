@@ -56,6 +56,7 @@ class _MyHomePageState extends State<MyHomePage> {
     fetchCoches().then((fetchedCoches) {
       setState(() {
         allCoches = fetchedCoches;
+        filterCochesByUser(_carFacade.getUser());
       });
     });
   }
@@ -63,13 +64,14 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<List<User>> fetchUsers() async {
     /*final response = await http.get(Uri.parse('http://localhost:3000/users'));
 
-  if (response.statusCode == 200) {
-    List<dynamic> data = jsonDecode(response.body);
-    return data.map((user) => User.fromJson(user)).toList();
-  } else {
-    throw Exception('Failed to load users');
-  }*/
+    if (response.statusCode == 200) {
+      List<dynamic> data = jsonDecode(response.body);
+      return data.map((user) => User.fromJson(user)).toList();
+    } else {
+      throw Exception('Failed to load users');
+    }*/
 
+    //Lista de usuarios locales
     List<User> users = [
       User(id: 1, name: 'Alice'),
       User(id: 2, name: 'Bob'),
@@ -260,7 +262,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                   content: Text(sortAsc
                       ? 'Orden ascendente alfabéticamente'
-                      : 'Orden descendente alfabéticamente'), // Show the sorting order
+                      : 'Orden descendente alfabéticamente'),
                 ));
                 sortAsc = !sortAsc;
               });
@@ -327,7 +329,7 @@ class _MyHomePageState extends State<MyHomePage> {
           dynamic result = await showDialog(
             context: context,
             builder: (BuildContext context) {
-              return CarDialog(); // Using the imported dialog widget
+              return CarDialog();
             },
           );
           if (result != null && result is Map<String, dynamic>) {
