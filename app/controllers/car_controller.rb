@@ -25,6 +25,12 @@ class CarController < ApplicationController
     render json: @car
   end
 
+  def destroy
+    @car = Car.find(params[:id])
+    @car.destroy
+    render json: @car
+  end
+
   private
 
   def car_params
