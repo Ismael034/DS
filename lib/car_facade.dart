@@ -1,3 +1,4 @@
+import 'package:concesionario_tunning/api_client.dart';
 import 'package:concesionario_tunning/builder/builder.dart';
 import 'package:concesionario_tunning/builder/coche.dart';
 import 'package:concesionario_tunning/builder/director.dart';
@@ -14,43 +15,55 @@ import 'package:concesionario_tunning/user/user.dart';
 class CarFacade {
   List<Coche> _cars = [];
   User _user = User(id: -1, name: 'nulo');
+  final ApiClient _apiClient = ApiClient();
 
-  void buildCar(Map<String, dynamic> carData) {
-    late CarBuilder builder;
-    late Director director;
+  Future<void> buildCar(Map<String, dynamic> carData) async {
+    if (_user.id != -1) {
+      late CarBuilder builder;
+      late Director director;
 
-    switch (carData['tipoCombustible']) {
-      case 'Gasolina':
-        builder = BuilderGasolina();
-        break;
-      case 'Hibrido':
-        builder = BuilderHibrido();
-        break;
-      case 'Electrico':
-        builder = BuilderElectrico();
-        break;
-      default:
-        String message = 'Wrong fuel type: ${carData['tipoCombustible']}';
-        throwException(message);
+      switch (carData['tipoCombustible']) {
+        case 'Gasolina':
+          builder = BuilderGasolina();
+          break;
+        case 'Hibrido':
+          builder = BuilderHibrido();
+          break;
+        case 'Electrico':
+          builder = BuilderElectrico();
+          break;
+        default:
+          String message = 'Wrong fuel type: ${carData['tipoCombustible']}';
+          throwException(message);
+      }
+
+      if (carData['capacidad'] < 0 || carData['gastoKm'] < 0) {
+        throw Exception('Incorrect model values');
+      }
+
+      director = Director(builder);
+      director.construir(
+          carData['modelo'], carData['capacidad'], carData['gastoKm']);
+
+      //_cars.add(builder.getResultado());
+      Coche coche = builder.getResultado();
+      coche.userId = _user.id;
+      await _apiClient.addCoche(coche);
+      await _apiClient
+          .getCochesUsuario(_user.id)
+          .then((value) => _cars = value);
     }
-
-    if (carData['capacidad'] < 0 || carData['gastoKm'] < 0) {
-      throw Exception('Incorrect model values');
-    }
-
-    director = Director(builder);
-    director.construir(
-        carData['modelo'], carData['capacidad'], carData['gastoKm']);
-    _cars.add(builder.getResultado());
   }
 
   void throwException(String message) {
     throw Exception(message);
   }
 
-  void deleteCar(int index) {
+  Future<void> deleteCar(int index) async {
     if (index >= _cars.length) throwException('Car not found');
-    _cars.removeAt(index);
+    await _apiClient.deleteCoche(_cars[index].id);
+    await _apiClient.getCochesUsuario(_user.id).then((value) => _cars = value);
+    //_cars.removeAt(index);
     //Método para eleminar el coche en el back
   }
 
@@ -63,7 +76,7 @@ class CarFacade {
     return _cars.where((car) => car.modelo.contains(modelo)).toList();
   }
 
-  void modifyCar(int strategy, int index) {
+  Future<void> modifyCar(int strategy, int index) async {
     if (_cars[index].modificado) throwException('Car already modified');
     Context context;
     switch (strategy) {
@@ -80,17 +93,20 @@ class CarFacade {
         context.modifyCar(_cars[index]);
         break;
     }
-
-    //método para actualizar coche en el back
+    await _apiClient.updateCoche(_cars[index]);
+    await _apiClient.getCochesUsuario(_user.id).then((value) => _cars = value);
   }
 
   User getUser() {
     return _user;
   }
 
-  void setUser(User? user) {
+  Future<void> setUser(User? user) async {
     if (user != null) {
       _user = user;
+      await _apiClient
+          .getCochesUsuario(_user.id)
+          .then((value) => _cars = value);
     }
   }
 

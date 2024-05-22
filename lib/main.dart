@@ -1,5 +1,6 @@
-import 'dart:html';
+//import 'dart:html';
 
+import 'package:concesionario_tunning/api_client.dart';
 import 'package:concesionario_tunning/builder/coche.dart';
 import 'package:concesionario_tunning/car_dialog.dart';
 import 'package:concesionario_tunning/item/car_item.dart';
@@ -40,6 +41,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final CarFacade _carFacade = CarFacade();
+  final ApiClient _apiClient = ApiClient();
   bool sortAsc = true;
   List<User> users = [];
   List<Coche> allCoches = [];
@@ -47,21 +49,56 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    fetchUsers().then((fetchedUsers) {
+    _initializeData();
+    /*users = _apiClient.getUsers();
+    _carFacade.setUser(users[0]);*/
+    /*_apiClient.getUsers().then((value) async {
+      users = value;
+      await _carFacade.setUser(users[0]);
+    });*/
+    /*fetchUsers().then((fetchedUsers) {
       setState(() {
         users = fetchedUsers;
         _carFacade.setUser(users[0]);
       });
-    });
-    fetchCoches().then((fetchedCoches) {
+    });*/
+    /*fetchCoches().then((fetchedCoches) {
       setState(() {
         allCoches = fetchedCoches;
         filterCochesByUser(_carFacade.getUser());
       });
-    });
+    });*/
   }
 
-  Future<List<User>> fetchUsers() async {
+  Future<void> _initializeData() async {
+    try {
+      // Espera a que getUsers termine
+      users = await _apiClient.getUsers();
+      // Usa el primer usuario en la lista
+      await _carFacade.setUser(users[0]);
+      setState(() {
+        allCoches = _carFacade.getCars();
+      });
+    } catch (e) {
+      // Manejo de errores
+      print('Error inicializando datos: $e');
+    }
+  }
+
+  Future<void> _updateData() async {
+    try {
+      // Espera a que getCochesUsuario termine
+      allCoches = await _apiClient.getCochesUsuario(_carFacade.getUser().id);
+      setState(() {
+        _carFacade.setCars(allCoches);
+      });
+    } catch (e) {
+      // Manejo de errores
+      print('Error actualizando datos: $e');
+    }
+  }
+
+  /*Future<List<User>> fetchUsers() async {
     /*final response = await http.get(Uri.parse('http://localhost:3000/users'));
 
     if (response.statusCode == 200) {
@@ -70,7 +107,7 @@ class _MyHomePageState extends State<MyHomePage> {
     } else {
       throw Exception('Failed to load users');
     }*/
-
+    /*
     //Lista de usuarios locales
     List<User> users = [
       User(id: 1, name: 'Alice'),
@@ -80,9 +117,12 @@ class _MyHomePageState extends State<MyHomePage> {
     ];
 
     return users;
+    */
+    return _apiClient.getUsers();
   }
 
   Future<List<Coche>> fetchCoches() async {
+    /*
     await Future.delayed(Duration(seconds: 1));
 
     List<Coche> coches = [
@@ -103,6 +143,8 @@ class _MyHomePageState extends State<MyHomePage> {
     coches[1].costeRecarga = 30;
 
     return coches;
+    */
+    return _apiClient.getCochesUsuario(_carFacade.getUser().id);
   }
 
   void filterCochesByUser(User user) {
@@ -110,7 +152,7 @@ class _MyHomePageState extends State<MyHomePage> {
       _carFacade.setCars(
           allCoches.where((coche) => coche.userId == user.id).toList());
     });
-  }
+  }*/
 
   Widget _buildCars(List<Coche> items) {
     return ListView.builder(
@@ -211,9 +253,13 @@ class _MyHomePageState extends State<MyHomePage> {
                     },
                   );
                   if (result != null && result is int) {
-                    setState(() {
-                      _carFacade.modifyCar(result, index);
+                    _carFacade.modifyCar(result, index);
+                    _updateData();
+                    /*
+                    setState(() async {
+                      await _carFacade.modifyCar(result, index);
                     });
+                    */
                   }
                 },
               ),
@@ -224,9 +270,12 @@ class _MyHomePageState extends State<MyHomePage> {
               child: IconButton(
                 icon: const Icon(Icons.delete),
                 onPressed: () {
-                  setState(() {
-                    _carFacade.deleteCar(index);
-                  });
+                  _carFacade.deleteCar(index);
+                  _updateData();
+                  /*
+                  setState(() async {
+                    await _carFacade.deleteCar(index);
+                  });*/
                 },
               ),
             ),
@@ -272,14 +321,21 @@ class _MyHomePageState extends State<MyHomePage> {
             value: _carFacade.getUser(),
             hint: Text("Seleccionar usuario"),
             onChanged: (User? newValue) {
-              setState(() {
-                _carFacade.setUser(newValue);
+              _carFacade.setUser(newValue);
+              _updateData();
+              /*setState(() {
+                await _carFacade.setUser(newValue);
+                /*
+                _apiClient.getCochesUsuario(newValue!.id).then((value) {
+                  allCoches = value;
+                })*/
+                /*
                 if (_carFacade.getUser().id != -1) {
                   filterCochesByUser(_carFacade.getUser());
                 } else {
                   _carFacade.setCars([]);
-                }
-              });
+                }*/
+              });*/
             },
             items: users.map<DropdownMenuItem<User>>((User user) {
               return DropdownMenuItem<User>(
@@ -333,9 +389,8 @@ class _MyHomePageState extends State<MyHomePage> {
             },
           );
           if (result != null && result is Map<String, dynamic>) {
-            setState(() {
-              _carFacade.buildCar(result);
-            });
+            _carFacade.buildCar(result);
+            _updateData();
           }
         },
         child: const Icon(Icons.add),
