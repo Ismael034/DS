@@ -6,7 +6,7 @@ class UserTest < ActiveSupport::TestCase
     assert user.valid?
   end
 
-  test "crear un nuevo usuario sin nombre debería ser inválido" do
+  test "no deja crear un nuevo usuario sin nombre" do
     user = User.new
     assert_not user.valid?
   end

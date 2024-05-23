@@ -12,7 +12,7 @@ class ConcesionarioTest < ActiveSupport::TestCase
     assert car.valid?
   end
 
-  test "crear un nuevo coche sin modelo debería ser inválido" do
+  test "no deja crear un nuevo coche sin modelo" do
     car = Car.new(
       gas_type: "Gasolina",
       autonomy: 600,
@@ -22,7 +22,7 @@ class ConcesionarioTest < ActiveSupport::TestCase
     assert_not car.valid?
   end
 
-  test "crear un nuevo coche sin tipo de combustible debería ser inválido" do
+  test "no deja crear un nuevo coche sin tipo de combustible" do
     car = Car.new(
       model: "Modelo",
       autonomy: 600,
@@ -32,7 +32,7 @@ class ConcesionarioTest < ActiveSupport::TestCase
     assert_not car.valid?
   end
 
-  test "crear un nuevo coche sin autonomía debería ser inválido" do
+  test "no deja crear un nuevo coche sin autonomía" do
     car = Car.new(
       model: "Modelo",
       gas_type: "Gasolina",
@@ -42,7 +42,7 @@ class ConcesionarioTest < ActiveSupport::TestCase
     assert_not car.valid?
   end
 
-  test "crear un nuevo coche sin tiempo de recarga debería ser inválido" do
+  test "no deja crear un nuevo coche sin tiempo de recarga" do
     car = Car.new(
       model: "Modelo",
       gas_type: "Gasolina",
@@ -52,7 +52,7 @@ class ConcesionarioTest < ActiveSupport::TestCase
     assert_not car.valid?
   end
 
-  test "crear un nuevo coche sin costo de recarga debería ser inválido" do
+  test "no deja crear un nuevo coche sin costo de recarga" do
     car = Car.new(
       model: "Modelo",
       gas_type: "Gasolina",
