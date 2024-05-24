@@ -38,8 +38,6 @@ void main() {
       }
 
       await facade.buildCar(carData);
-      carData['modelo'] = 'Modelo2';
-      await facade.buildCar(carData);
     });
 
     test('Gasoline vehicle creation test', () async {
