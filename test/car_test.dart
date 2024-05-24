@@ -26,10 +26,10 @@ void main() {
     });
 
     tearDown(() {
-      int i = 0;
+      int i = facade.getCars().length;
       while (facade.getCars().isNotEmpty) {
         facade.deleteCar(carData[i]);
-        i++;
+        i--;
       }
     });
 
