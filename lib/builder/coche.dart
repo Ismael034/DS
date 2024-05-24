@@ -24,7 +24,6 @@ class Coche {
     Coche coche = Coche();
     coche.id = json['id'];
     coche.modelo = json['model'];
-    //coche.tipoCombustible = Combustible.values[json['gas_type']];
     switch (json['gas_type']) {
       case 'Gasolina':
         coche.tipoCombustible = Combustible.gas;
@@ -38,7 +37,6 @@ class Coche {
       default:
         throw Exception('Wrong fuel type: ${json['gas_type']}');
     }
-    //coche.tipoCombustible = json['gas_type'];
     coche.autonomia = double.parse(json['autonomy']);
     coche.tiempoRecarga = double.parse(json['refuel_time']);
     coche.costeRecarga = double.parse(json['refuel_cost']);

@@ -45,7 +45,6 @@ class CarFacade {
       director.construir(
           carData['modelo'], carData['capacidad'], carData['gastoKm']);
 
-      //_cars.add(builder.getResultado());
       Coche coche = builder.getResultado();
       coche.userId = _user.id;
       await _apiClient.addCoche(coche);
@@ -63,8 +62,6 @@ class CarFacade {
     if (index >= _cars.length) throwException('Car not found');
     await _apiClient.deleteCoche(_cars[index].id);
     await _apiClient.getCochesUsuario(_user.id).then((value) => _cars = value);
-    //_cars.removeAt(index);
-    //Método para eleminar el coche en el back
   }
 
   void sortCars(bool upward) {

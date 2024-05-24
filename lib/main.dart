@@ -50,109 +50,30 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     _initializeData();
-    /*users = _apiClient.getUsers();
-    _carFacade.setUser(users[0]);*/
-    /*_apiClient.getUsers().then((value) async {
-      users = value;
-      await _carFacade.setUser(users[0]);
-    });*/
-    /*fetchUsers().then((fetchedUsers) {
-      setState(() {
-        users = fetchedUsers;
-        _carFacade.setUser(users[0]);
-      });
-    });*/
-    /*fetchCoches().then((fetchedCoches) {
-      setState(() {
-        allCoches = fetchedCoches;
-        filterCochesByUser(_carFacade.getUser());
-      });
-    });*/
   }
 
   Future<void> _initializeData() async {
     try {
-      // Espera a que getUsers termine
       users = await _apiClient.getUsers();
-      // Usa el primer usuario en la lista
       await _carFacade.setUser(users[0]);
       setState(() {
         allCoches = _carFacade.getCars();
       });
     } catch (e) {
-      // Manejo de errores
       print('Error inicializando datos: $e');
     }
   }
 
   Future<void> _updateData() async {
     try {
-      // Espera a que getCochesUsuario termine
       allCoches = await _apiClient.getCochesUsuario(_carFacade.getUser().id);
       setState(() {
         _carFacade.setCars(allCoches);
       });
     } catch (e) {
-      // Manejo de errores
       print('Error actualizando datos: $e');
     }
   }
-
-  /*Future<List<User>> fetchUsers() async {
-    /*final response = await http.get(Uri.parse('http://localhost:3000/users'));
-
-    if (response.statusCode == 200) {
-      List<dynamic> data = jsonDecode(response.body);
-      return data.map((user) => User.fromJson(user)).toList();
-    } else {
-      throw Exception('Failed to load users');
-    }*/
-    /*
-    //Lista de usuarios locales
-    List<User> users = [
-      User(id: 1, name: 'Alice'),
-      User(id: 2, name: 'Bob'),
-      User(id: 3, name: 'Charlie'),
-      User(id: 4, name: 'Diana'),
-    ];
-
-    return users;
-    */
-    return _apiClient.getUsers();
-  }
-
-  Future<List<Coche>> fetchCoches() async {
-    /*
-    await Future.delayed(Duration(seconds: 1));
-
-    List<Coche> coches = [
-      Coche(),
-      Coche(),
-    ];
-
-    coches[0].userId = 2;
-    coches[0].modelo = 'Cupra';
-    coches[0].autonomia = 120;
-    coches[0].tipoCombustible = Combustible.gas;
-    coches[0].costeRecarga = 20;
-
-    coches[1].userId = 1;
-    coches[1].modelo = 'Toyota';
-    coches[1].autonomia = 100;
-    coches[1].tipoCombustible = Combustible.gas;
-    coches[1].costeRecarga = 30;
-
-    return coches;
-    */
-    return _apiClient.getCochesUsuario(_carFacade.getUser().id);
-  }
-
-  void filterCochesByUser(User user) {
-    setState(() {
-      _carFacade.setCars(
-          allCoches.where((coche) => coche.userId == user.id).toList());
-    });
-  }*/
 
   Widget _buildCars(List<Coche> items) {
     return ListView.builder(
@@ -255,11 +176,6 @@ class _MyHomePageState extends State<MyHomePage> {
                   if (result != null && result is int) {
                     _carFacade.modifyCar(result, index);
                     _updateData();
-                    /*
-                    setState(() async {
-                      await _carFacade.modifyCar(result, index);
-                    });
-                    */
                   }
                 },
               ),
@@ -272,10 +188,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 onPressed: () {
                   _carFacade.deleteCar(index);
                   _updateData();
-                  /*
-                  setState(() async {
-                    await _carFacade.deleteCar(index);
-                  });*/
                 },
               ),
             ),
@@ -323,19 +235,6 @@ class _MyHomePageState extends State<MyHomePage> {
             onChanged: (User? newValue) {
               _carFacade.setUser(newValue);
               _updateData();
-              /*setState(() {
-                await _carFacade.setUser(newValue);
-                /*
-                _apiClient.getCochesUsuario(newValue!.id).then((value) {
-                  allCoches = value;
-                })*/
-                /*
-                if (_carFacade.getUser().id != -1) {
-                  filterCochesByUser(_carFacade.getUser());
-                } else {
-                  _carFacade.setCars([]);
-                }*/
-              });*/
             },
             items: users.map<DropdownMenuItem<User>>((User user) {
               return DropdownMenuItem<User>(

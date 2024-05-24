@@ -11,14 +11,13 @@ void main() {
     late Map<String, dynamic> carData;
     late double capacidad;
     late double gastoKm;
-    List<User> users = [];
+    late User testUser;
     List<Coche> allCoches = [];
 
     setUp(() async {
       facade = CarFacade();
+      testUser = User(id: 7, name: "Test");
       apiClient = ApiClient();
-      users = [User(id: 0, name: "a")];
-      await facade.setUser(users[0]); // Ensure await is used here
       capacidad = 100.0;
       gastoKm = 10.0;
       carData = {
@@ -27,14 +26,20 @@ void main() {
         'capacidad': capacidad,
         'gastoKm': gastoKm,
       };
-    });
 
-    tearDown(() {
-      int i = facade.getCars().length - 1;
-      while (facade.getCars().isNotEmpty) {
-        facade.deleteCar(i);
-        i--;
+      await facade.setUser(testUser);
+      allCoches = facade.getCars();
+      if (allCoches.isNotEmpty) {
+        int i = allCoches.length - 1;
+        while (i >= 0) {
+          await facade.deleteCar(i);
+          i--;
+        }
       }
+
+      await facade.buildCar(carData);
+      carData['modelo'] = 'Modelo2';
+      await facade.buildCar(carData);
     });
 
     test('Gasoline vehicle creation test', () async {
