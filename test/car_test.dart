@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:concesionario_tunning/car_facade.dart';
 import 'package:concesionario_tunning/builder/coche.dart';
+import 'package:concesionario_tunning/user/user.dart';
 
 void main() {
   group('CarFacade', () {
@@ -8,9 +9,12 @@ void main() {
     late dynamic carData;
     late double capacidad;
     late double gastoKm;
+    late List<User> users = [];
 
     setUp(() {
       facade = CarFacade();
+      users.add(User(id: 0, name: "a"));
+      facade.setUser(users[0]);
       capacidad = 100.0;
       gastoKm = 10.0;
       carData = {
@@ -20,6 +24,15 @@ void main() {
         'gastoKm': gastoKm,
       };
     });
+
+    tearDown(() {
+      int i = 0;
+      while (facade.getCars().isNotEmpty) {
+        facade.deleteCar(carData[i]);
+        i++;
+      }
+    });
+
     
     test('Gasoline vehicle creation test', () async {
       carData['tipoCombustible'] = 'Gasolina';

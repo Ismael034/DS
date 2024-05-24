@@ -1,10 +1,12 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:concesionario_tunning/car_facade.dart';
+import 'package:concesionario_tunning/user/user.dart';
 
 void main() {
   group('CarManager', () {
     late CarFacade facade;
     late dynamic carData;
+    late List<User> users = [];
 
     setUp(() async {
       facade = CarFacade();
@@ -14,6 +16,10 @@ void main() {
         'capacidad': 100.0,
         'gastoKm': 10.0,
       };
+      users.add(User(id: 0, name: "a"));
+      users.add(User(id: 1, name: "b"));
+      facade.setUser(users[0]);
+      facade.setUser(users[1]);
       carData['tipoCombustible'] = 'Gasolina';
       await facade.buildCar(carData);
       carData['modelo'] = 'Modelo2';
@@ -52,6 +58,14 @@ void main() {
       final filteredCars = facade.filterCars('Modelo2');
       expect(filteredCars.length, 1);
       expect(filteredCars.first.modelo, 'Modelo2');
+    });
+
+    tearDown(() {
+      int i = 0;
+      while (facade.getCars().isNotEmpty) {
+        facade.deleteCar(carData[i]);
+        i++;
+      }
     });
 
     test('Car sorting test', () async {
