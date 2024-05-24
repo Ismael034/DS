@@ -14,11 +14,11 @@ void main() {
     List<User> users = [];
     List<Coche> allCoches = [];
 
-    setUp(() {
+    setUp(() async {
       facade = CarFacade();
       apiClient = ApiClient();
       users = [User(id: 0, name: "a")];
-      facade.setUser(users[0]);
+      await facade.setUser(users[0]); // Ensure await is used here
       capacidad = 100.0;
       gastoKm = 10.0;
       carData = {
@@ -30,7 +30,7 @@ void main() {
     });
 
     tearDown(() {
-      int i = facade.getCars().length;
+      int i = facade.getCars().length - 1;
       while (facade.getCars().isNotEmpty) {
         facade.deleteCar(i);
         i--;
